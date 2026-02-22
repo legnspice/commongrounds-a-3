@@ -10,6 +10,9 @@ class CommissionType(models.Model):
     
     def get_absolute_url(self):
         return reverse('commissions_type_name', args=[str(self.name)])
+    
+    class Meta:
+        ordering = ['name'] 
 
 
 class Commission(models.Model):
@@ -25,4 +28,7 @@ class Commission(models.Model):
 
     def get_absolute_url(self):
         return reverse('commissions_name', args=[str(self.title)])
+    
+    class Meta:
+        ordering = ['created_on'] 
     
