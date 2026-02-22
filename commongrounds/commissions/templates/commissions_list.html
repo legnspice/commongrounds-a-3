@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for Commission in object_list %}
+        <a href='/commissions/request/{{Commission.id}}'>Commission {{Commission.id}}</a>
+        <ul>
+            <li>
+                <h1>{{Commission.title}}</h1>
+                <p>{{Commission.description}}</p>
+                <p>People required: {{Commission.people_required}}</p>
+                <p>Created on: {{Commission.created_on}}</p>
+                <p>Updated on: {{Commission.updated_on}}</p>
+
+            </li>
+        </ul>
+    {% endfor %}
+{% endblock %}
