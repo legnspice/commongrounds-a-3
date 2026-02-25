@@ -10,9 +10,10 @@ class Book(models.Model):
     genre = models.ForeignKey(
         Genre,
         on_delete=models.SET_NULL,
-        related_name='books'
+        related_name='books',
+        null=True
     )
-    author = models.CharField()
+    author = models.CharField(max_length=255)
     publicationYear = models.IntegerField()
     createdOn = models.DateTimeField()
     updatedOn = models.DateTimeField()
