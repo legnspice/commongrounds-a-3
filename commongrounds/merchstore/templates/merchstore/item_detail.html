@@ -1,0 +1,10 @@
+{% extends '/merchstore/base_merchstore.html' %} {% block content %}
+
+<p>Item {{object.id}}</p>
+<h1>Name: {{object.name}}</h1>
+<p>Product Type: {{object.product_type.name}}</p>
+<p>Description: {{object.description}}</p>
+<p>Price: {{object.price}}</p>
+<a href="{% url 'merchstore:item_list' %}">Back to Store</a>
+
+{% endblock %}
