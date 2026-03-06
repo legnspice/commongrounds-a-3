@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'merchstore',
     'localevents',
     'diyprojects',
-    'bookclub'
+    'bookclub',
+    'commissions'
 ]
 
 MIDDLEWARE = [
