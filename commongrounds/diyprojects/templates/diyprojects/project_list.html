@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DIY Projects</title>
+</head>
+<body>
+    <h1>DIY Projects</h1>
+    <ul>
+        {% for project in projects %}
+        <li>
+            <a href="/diyprojects/project/{{ project.pk }}">{{ project.title }}</a>
+            - {{ project.category }} - {{ project.created_on }}
+        </li>
+        {% empty %}
+        <li>No projects yet.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
