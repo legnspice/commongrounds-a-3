@@ -1,5 +1,7 @@
 .env
 db.sqlite3
-*/**/*.pycvenv/
+*.pyc
+*/**/*.pyc
 __pycache__/
-venv
+venv/
+.DS_Store
