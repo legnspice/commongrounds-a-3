@@ -4,3 +4,4 @@ db.sqlite3
 myenv
 get-pip.py
 .prettierignore
+__pycache__/
