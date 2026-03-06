@@ -2,3 +2,4 @@
 db.sqlite3
 */**/*.pycvenv/
 __pycache__/
+venv
