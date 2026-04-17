@@ -13,5 +13,5 @@ def profile_update_view(request, username):
     else:
         form = ProfileUpdateForm()  # empty form on GET
 
-    context = {'forms': form}
+    context = {'form': form}
     return render(request, 'update_user.html', context)

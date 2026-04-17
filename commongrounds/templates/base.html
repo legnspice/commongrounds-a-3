@@ -9,13 +9,13 @@
   </head>
   <body>
     {% if request.user.is_authenticated %}
+        <a href="/accounts/{{ request.user.username }}/">Edit Profile</a>
         <form method="POST" action="{% url 'logout' %}">
             {% csrf_token %}
             <button type="submit">Logout</button>
         </form>
     {% else %}
         <a href="{% url 'login' %}"> Login </a> <br>
-        <a href="/accounts/{{ request.user.username }}/">Edit Profile</a>
     {% endif %}
     {% block content %}{% endblock %} {% block script %}{% endblock %}
   </body>
