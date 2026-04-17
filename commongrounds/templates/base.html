@@ -8,6 +8,7 @@
     {% block style %}{% endblock %}
   </head>
   <body>
+    <a href="/accounts/{{ request.user.username }}/">Edit Profile</a>
     {% if request.user.is_authenticated %}
         <form method="POST" action="{% url 'logout' %}">
             {% csrf_token %}
