@@ -5,13 +5,18 @@ from .forms import ProfileUpdateForm
 
 @login_required
 def profile_update_view(request, username):
+    if request.user.username != username:
+        return redirect('accounts:profile_update', username=request.user.username)
+    
+    profile = request.user.profile
+    
     if request.method == 'POST':
-        form = ProfileUpdateForm(request.POST)
+        form = ProfileUpdateForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
             return redirect('accounts:profile_update', username=username)
     else:
-        form = ProfileUpdateForm()  # empty form on GET
+        form = ProfileUpdateForm(instance=profile)  
 
     context = {'form': form}
     return render(request, 'update_user.html', context)

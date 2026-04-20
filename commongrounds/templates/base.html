@@ -9,6 +9,7 @@
   </head>
   <body>
     {% if request.user.is_authenticated %}
+        <p> Hi {{ request.user.profile.displayName }}</p>
         <a href="/accounts/{{ request.user.username }}/">Edit Profile</a>
         <form method="POST" action="{% url 'logout' %}">
             {% csrf_token %}
