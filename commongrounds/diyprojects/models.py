@@ -28,7 +28,6 @@ class Project(models.Model):
 
     class Meta:
         ordering = ['-created_on']
-        verbose_name_plural = 'Project categories'
 
 
     def __str__(self):
