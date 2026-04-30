@@ -1,9 +1,50 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} 
+{% block content %}
 <h2>Book List</h2>
+
+{% if user.is_authenticated %}
+  {# <p><a href="{% url 'bookclub:book_create' %}">+ Add a New Book</a></p> #}
+
+  {% if contributed_books %}
+    <h3>Books you have contributed to:</h3>
+    <ul>
+      {% for book in contributed_books %}
+        <li>
+          <a href="{{book.get_absolute_url}}">{{book.title}}</a> by {{book.author}}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if bookmarked_books %}
+    <h3>Books you have bookmarked:</h3>
+    <ul>
+      {% for book in bookmarked_books %}
+        <li>
+          <a href="{{book.get_absolute_url}}">{{book.title}}</a> by {{book.author}}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if reviewed_books %}
+    <h3>Books you have reviewed:</h3>
+    <ul>
+      {% for book in reviewed_books %}
+        <li>
+          <a href="{{book.get_absolute_url}}">{{book.title}}</a> by {{book.author}}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <h3>All other books:</h3>
+{% endif %}
+
 <ul>
-  {% for book in books %}
+  {% for book in all_books %}
   <li>
-    <a href="{{book.get_absolute_url}}">{{book.title}}</a> by {{book.author}}
+    <a href="{{book.get_absolute_url}}">{{book.title}}</a> by {{book.author}} 
   </li>
   {% endfor %}
 </ul>
