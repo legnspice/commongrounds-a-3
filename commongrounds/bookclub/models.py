@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-from ..accounts.models import Profile
+from accounts.models import Profile
 
 class Genre(models.Model):
     name = models.CharField(max_length=255)
@@ -59,7 +59,7 @@ class Bookmark(models.Model):
 
 class Borrow(models.Model):
     book = models.ForeignKey(
-        Book, on_delete=models.CASCADE, related_name="borrower"
+        Book, on_delete=models.CASCADE, related_name="borrows"
     )
     borrower = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="books_borrowed", null=True, blank=True
