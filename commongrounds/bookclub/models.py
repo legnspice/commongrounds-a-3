@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-
+from ..accounts.models import Profile
 
 class Genre(models.Model):
     name = models.CharField(max_length=255)
@@ -16,10 +16,15 @@ class Genre(models.Model):
 class Book(models.Model):
     title = models.CharField(max_length=255)
     genre = models.ForeignKey(
-        Genre, on_delete=models.SET_NULL, related_name="books", null=True
+        Genre, on_delete=models.SET_NULL, related_name="books", null=True, blank=True
+    )
+    contributor = models.ForeignKey(
+        Profile, on_delete=models.SET_NULL, related_name="books", null = True, blank=True
     )
     author = models.CharField(max_length=255)
+    synopsis = models.TextField()
     publicationYear = models.IntegerField()
+    availableToBorrow = models.BooleanField()
     createdOn = models.DateTimeField(auto_now_add=True)
     updatedOn = models.DateTimeField(auto_now=True)
 
@@ -31,3 +36,34 @@ class Book(models.Model):
 
     class Meta:
         ordering = ["-publicationYear"]
+
+class BookReview(models.Model):
+    userReview = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="reviews", null=True, blank=True
+    )
+    anonReview = models.TextField(null=True)
+    book = models.ForeignKey(
+        Book, on_delete=models.CASCADE, related_name="reviews"
+    )
+    title = models.TextField()
+    comment = models.TextField()
+
+class Bookmark(models.Model):
+    profile = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="bookmarks"
+    )
+    book = models.ForeignKey(
+        Book, on_delete=models.CASCADE, related_name="bookmarks"
+    )
+    dateBookmarked = models.DateField(auto_now_add=True)
+
+class Borrowed(models.Model):
+    book = models.ForeignKey(
+        Book, on_delete=models.CASCADE, related_name="borrower"
+    )
+    borrower = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="books_borrowed"
+    )
+    name = models.TextField()
+    dateBorrowed = models.DateField()
+    dateToReturn = models.DateField()
