@@ -19,12 +19,12 @@ class Book(models.Model):
         Genre, on_delete=models.SET_NULL, related_name="books", null=True, blank=True
     )
     contributor = models.ForeignKey(
-        Profile, on_delete=models.SET_NULL, related_name="books", null = True, blank=True
+        Profile, on_delete=models.SET_NULL, related_name="contributed_books", null = True, blank=True
     )
     author = models.CharField(max_length=255)
     synopsis = models.TextField()
     publicationYear = models.IntegerField()
-    availableToBorrow = models.BooleanField()
+    availableToBorrow = models.BooleanField(default=True)
     createdOn = models.DateTimeField(auto_now_add=True)
     updatedOn = models.DateTimeField(auto_now=True)
 
@@ -41,7 +41,7 @@ class BookReview(models.Model):
     userReviewer = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="reviews", null=True, blank=True
     )
-    anonReviewer = models.TextField(null=True)
+    anonReviewer = models.TextField(blank=True)
     book = models.ForeignKey(
         Book, on_delete=models.CASCADE, related_name="reviews"
     )
@@ -57,12 +57,12 @@ class Bookmark(models.Model):
     )
     dateBookmarked = models.DateField(auto_now_add=True)
 
-class Borrowed(models.Model):
+class Borrow(models.Model):
     book = models.ForeignKey(
         Book, on_delete=models.CASCADE, related_name="borrower"
     )
     borrower = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name="books_borrowed", null=True
+        Profile, on_delete=models.CASCADE, related_name="books_borrowed", null=True, blank=True
     )
     name = models.CharField(max_length=255, blank=True)
     dateBorrowed = models.DateField()
