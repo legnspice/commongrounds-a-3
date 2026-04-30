@@ -1,7 +1,10 @@
-from django.shortcuts import render
-from django.db.models import Q
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
-from .models import Book
+from .models import Book, Bookmark
+from .forms import BookFormFactory
+
+from django.db.models import Q
 
 
 def book_list(request):
@@ -34,9 +37,35 @@ def book_list(request):
 
 def book_detail(request, pk):
     book = Book.objects.get(pk=pk)
+
+    ReviewForm = BookFormFactory.get_form("review")
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.book = book
+
+            if request.user.is_authenticated:
+                review.userReviewer = request.user.profile
+            else:
+                review.anonReviewer = "Anonymous"
+            
+            review.save()
+            return redirect("bookclub:book_detail", pk=book.pk)
+    else:
+        form = ReviewForm()
+
     bookmarkCount = book.bookmarks.count()
     context = {
         "book": book,
-        "bookmarkCount": bookmarkCount
+        "bookmarkCount": bookmarkCount,
+        "form": form
     }
     return render(request, "book_detail.html", context)
+
+@login_required
+def bookmark_book(request, pk):
+    book = Book.objects.get(pk=pk)
+    Bookmark.objects.get_or_create(profile=request.user.profile, book=book)
+    return redirect("bookclub:book_detail", pk=book.pk)
