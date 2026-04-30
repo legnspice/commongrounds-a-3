@@ -8,10 +8,26 @@
     <p>Created On: {{book.createdOn|date:"Y-m-d"}}</p>
     <p>Updated On: {{book.updatedOn|date:"Y-m-d"}}</p>
 
-    <p>Available to Borrow: {% if book.availableToBorrow %} YES {% else %} NO {% endif %}</p>
     <p>Bookmarks: {{bookmarkCount}} </p>
+    <form method="post" action="{% url 'bookclub:bookmark_book' book.pk %}">
+        {% csrf_token %}
+        <button type="submit">Bookmark this book</button>
+    </form>
+
+    <p>Available to Borrow: {% if book.availableToBorrow %} YES {% else %} NO {% endif %}</p>
+    {% if book.availableToBorrow %}
+        <form method="get" action="#">
+            {# action="{% url 'bookclub:book_borrow' book.pk %}" #}
+            <button type="submit">Borrow this book</button>
+        </form>
+    {% endif %}
 
     <h3>Reviews</h3>
+    <form method="post">
+        {% csrf_token%}
+        {{ form.as_p }}
+        <button type="submit">Submit Review</button>
+    </form>
     <hr style="color: black;">
     {% for review in book.reviews.all %}
         <p> {% if review.userReviewer %} {{review.userReviewer.displayName}} {% else %} {{review.anonReviewer}} {% endif %}</p> 
@@ -22,7 +38,9 @@
     {% endfor %}
 
     {% if user.is_authenticated and book.contributor == user.profile %}
+        <p><a href="#"> Edit this book</a></p>
         {# {% url 'bookclub:book_update' book.pk %} #}
     {% endif %}
+
 
 {% endblock %}
