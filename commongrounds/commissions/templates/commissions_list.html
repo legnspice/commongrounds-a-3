@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for Commission in object_list %}
+    {% for Commission in commissions%}
         <a href='{{Commission.get_absolute_url}}'>Commission {{Commission.id}}</a>
         <br>
     {% endfor %}
