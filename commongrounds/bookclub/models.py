@@ -38,14 +38,14 @@ class Book(models.Model):
         ordering = ["-publicationYear"]
 
 class BookReview(models.Model):
-    userReview = models.ForeignKey(
+    userReviewer = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="reviews", null=True, blank=True
     )
-    anonReview = models.TextField(null=True)
+    anonReviewer = models.TextField(null=True)
     book = models.ForeignKey(
         Book, on_delete=models.CASCADE, related_name="reviews"
     )
-    title = models.TextField()
+    title = models.CharField(max_length=255)
     comment = models.TextField()
 
 class Bookmark(models.Model):
@@ -62,8 +62,8 @@ class Borrowed(models.Model):
         Book, on_delete=models.CASCADE, related_name="borrower"
     )
     borrower = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name="books_borrowed"
+        Profile, on_delete=models.CASCADE, related_name="books_borrowed", null=True
     )
-    name = models.TextField()
+    name = models.CharField(max_length=255, blank=True)
     dateBorrowed = models.DateField()
     dateToReturn = models.DateField()
