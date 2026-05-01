@@ -40,6 +40,7 @@ class Project(models.Model):
     def __str__(self):
         return self.title
     
+
 class Favorite(models.Model):
     project = models.ForeignKey(
         Project,
@@ -61,3 +62,19 @@ class Favorite(models.Model):
 
     def __str__(self):
         return f"{self.profile} - {self.project}"
+    
+    
+class ProjectReview(models.Model):
+    reviewer = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+    )
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+    )
+    comment = models.TextField()
+    image = models.ImageField()
+
+    def __str__(self):
+        return f"{self.reviewer} - {self.project}"
