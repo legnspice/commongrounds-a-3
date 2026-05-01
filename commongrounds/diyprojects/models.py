@@ -1,4 +1,5 @@
 from django.db import models
+from accounts.models import Profile
 
 
 class ProjectCategory(models.Model):
@@ -19,6 +20,12 @@ class Project(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
+    )
+    creator = models.ForeignKey(
+    Profile,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
     )
     description = models.TextField()
     materials = models.TextField()
