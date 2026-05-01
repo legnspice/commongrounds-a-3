@@ -8,6 +8,16 @@
     {% block style %}{% endblock %}
   </head>
   <body>
+    {% if request.user.is_authenticated %}
+        <p> Hi {{ request.user.profile.displayName }}</p>
+        <a href="/accounts/{{ request.user.username }}/">Edit Profile</a>
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}"> Login </a> <br>
+    {% endif %}
     {% block content %}{% endblock %} {% block script %}{% endblock %}
   </body>
 </html>
