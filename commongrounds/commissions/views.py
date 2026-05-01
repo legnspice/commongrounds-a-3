@@ -27,7 +27,7 @@ class CommissionListView(ListView):
         if user.is_authenticated:
             user_commissions = self.get_queryset().filter(maker= user.profile)
 
-            applied_commissions = self.get_queryset().filter(jobs__jobapplications__jobapplications_profile = user.profile)
+            applied_commissions = self.get_queryset().filter(jobs__jobapplications__applicant = user.profile)
 
             all_commissions = self.get_queryset().exclude(maker=user.profile)
 
@@ -43,3 +43,38 @@ class CommissionListView(ListView):
 class CommissionDetailView(DetailView):
     model = Commission
     template_name = 'commissions_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        commission = self.get_object()    
+        jobs = commission.jobs.all() 
+
+        total_manpower = sum(job.manpower_required for job in jobs)
+
+        accepted_counts = {
+            job.id: job.jobapplications.filter(status="accepted").count()
+            for job in jobs
+        }
+        open_manpower = sum(
+            max(job.manpower_required - accepted_counts[job.id], 0)
+            for job in jobs
+        )
+        context['is_owner'] = self.request.user == commission.maker.user
+        context['total_manpower'] = total_manpower
+        context['open_manpower'] = open_manpower
+
+        user = self.request.user
+        jobs_with_status = []
+        for job in jobs:
+            is_full = accepted_counts[job.id] >= job.manpower_required
+            already_applied = (
+                user.is_authenticated and
+                job.jobapplications.filter(applicant=user.profile).exists()
+            )
+            jobs_with_status.append({
+                'job': job,
+                'is_full': is_full,
+                'already_applied': already_applied,
+            })
+
+        return context
