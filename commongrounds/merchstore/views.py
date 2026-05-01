@@ -1,11 +1,12 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, View
 from django.views.generic.edit import CreateView, UpdateView, FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Product, Transaction
 from .forms import ProductForm, ProductUpdateForm, TransactionForm
+from .strategies import AuthenticatedPurchaseStrategy, GuestPurchaseStrategy
 
 
 class ItemListView(ListView):
@@ -39,21 +40,15 @@ class ItemDetailView(FormMixin, DetailView):
         return self.form_invalid(form)
 
     def form_valid(self, form):
+        if self.request.user.is_authenticated and self.object.owner == self.request.user.profile:
+            return self.form_invalid(form)
+        if form.cleaned_data['amount'] > self.object.stock:
+            return self.form_invalid(form)
         if self.request.user.is_authenticated:
-            if self.object.owner == self.request.user.profile:
-                return self.form_invalid(form)
-            transaction = form.save(commit=False)
-            transaction.buyer = self.request.user.profile
-            transaction.product = self.object
-            transaction.save()
-            self.object.stock -= transaction.amount
-            if self.object.stock <= 0:
-                self.object.stock = 0
-                self.object.status = 'Out of stock'
-            self.object.save()
-            return redirect('merchstore:cart')
+            strategy = AuthenticatedPurchaseStrategy()
         else:
-            return redirect('login')
+            strategy = GuestPurchaseStrategy()
+        return strategy.execute(self.request, self.object, form)
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
@@ -115,3 +110,19 @@ class TransactionListView(LoginRequiredMixin, ListView):
             grouped.setdefault(t.buyer, []).append(t)
         context['grouped'] = grouped
         return context
+
+
+class CompletePurchaseView(LoginRequiredMixin, View):
+    def get(self, request):
+        pending = request.session.pop('pending_transaction', None)
+        if pending:
+            product = get_object_or_404(Product, pk=pending['product_id'])
+            amount = pending['amount']
+            if amount >= 1 and amount <= product.stock:
+                Transaction.objects.create(
+                    buyer=request.user.profile,
+                    product=product,
+                    amount=amount,
+                )
+                return redirect('merchstore:cart')
+        return redirect('merchstore:item_list')
