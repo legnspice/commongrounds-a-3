@@ -11,28 +11,28 @@ class EventListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
+        # Check if user is authenticated AND has a profile
         if self.request.user.is_authenticated:
-            # Retrieve the user's profile from the newly linked accounts app
-            profile = self.request.user.profile
-            
-            # 1. Events organized by the logged-in user
-            events_created = Event.objects.filter(organizer=profile)
-            
-            # 2. Events the user has registered for
-            events_signed_up = Event.objects.filter(
-                eventsignup__user_registrant=profile
-            )
-            
-            # 3. All remaining events
-            all_events = Event.objects.exclude(
-                id__in=events_created.values('id')
-            ).exclude(
-                id__in=events_signed_up.values('id')
-            )
-            
-            # Pass the groups to the template
-            context['events_created'] = events_created
-            context['events_signed_up'] = events_signed_up
-            context['all_events'] = all_events
+            try:
+                profile = self.request.user.profile
+                
+                events_created = Event.objects.filter(organizer=profile)
+                events_signed_up = Event.objects.filter(eventsignup__user_registrant=profile)
+                
+                # Exclude specific events from the main list
+                all_events = Event.objects.exclude(
+                    id__in=events_created.values('id')
+                ).exclude(
+                    id__in=events_signed_up.values('id')
+                )
+                
+                context['events_created'] = events_created
+                context['events_signed_up'] = events_signed_up
+                context['all_events'] = all_events
+            except AttributeError:
+                # Fallback if profile doesn't exist for this user
+                context['all_events'] = Event.objects.all()
+        else:
+            context['all_events'] = Event.objects.all()
             
         return context
