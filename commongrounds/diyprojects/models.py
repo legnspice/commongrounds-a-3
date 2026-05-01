@@ -39,3 +39,25 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
+    
+class Favorite(models.Model):
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+    )
+    profile = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+    )
+    date_favorited = models.DateField(auto_now_add=True)
+    project_status = models.CharField(
+        max_length = 10,
+        choices=[
+            ('Backlog', 'Backlog'),
+            ('To-Do', 'To-Do'),
+            ('Done', 'Done'),
+        ],
+    )
+
+    def __str__(self):
+        return f"{self.profile} - {self.project}"
