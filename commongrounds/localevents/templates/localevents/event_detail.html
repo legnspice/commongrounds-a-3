@@ -1,25 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ event.title }}</title>
-</head>
-<body>
-    <h1>{{ event.title }}</h1>
-    
-    <div>
-        <p><strong>Category:</strong> {{ event.category.name|default:"Uncategorized" }}</p>
-        <p><strong>Location:</strong> {{ event.location }}</p>
-        <p><strong>Start Time:</strong> {{ event.start_time }}</p>
-        <p><strong>End Time:</strong> {{ event.end_time }}</p>
-    </div>
+{% extends 'base.html' %}
 
-    <div>
-        <h2>Description</h2>
-        <p>{{ event.description }}</p>
-    </div>
+{% block content %}
+<div class="event-detail">
+    <h2>{{ event.name }}</h2>
+    
+    <p><strong>Organized by:</strong> {{ event.organizer }}</p>
+    <p><strong>Status:</strong> {{ event.get_status_display }}</p>
+    <p><strong>Date & Time:</strong> {{ event.date }}</p>
+    <p><strong>Location:</strong> {{ event.location }}</p>
+    <p><strong>Capacity:</strong> {{ event.signups.count }} / {{ event.capacity }} enrolled</p>
 
     <hr>
-    <a href="{% url 'localevents:event_list' %}">Back to Events List</a>
-</body>
-</html>
+    <h3>About this Event</h3>
+    <p>{{ event.description }}</p>
+    <hr>
+
+    <!-- Sign Up Logic -->
+    {% if user.is_authenticated %}
+        {% if is_registered %}
+            <button disabled style="background-color: grey;">You are already registered!</button>
+        {% elif event.signups.count >= event.capacity %}
+            <button disabled style="background-color: red;">Event is Full</button>
+        {% else %}
+            <!-- We will build the actual submit logic for this next! -->
+            <form action="#" method="POST">
+                {% csrf_token %}
+                <button type="submit">Sign Up for Event</button>
+            </form>
+        {% endif %}
+    {% else %}
+        <p><a href="{% url 'login' %}">Log in</a> to sign up for this event.</p>
+    {% endif %}
+
+    <br><br>
+    <a href="{% url 'localevents:event_list' %}">← Back to Events List</a>
+</div>
+{% endblock %}

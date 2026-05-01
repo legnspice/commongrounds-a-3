@@ -36,3 +36,28 @@ class EventListView(ListView):
             context['all_events'] = Event.objects.all()
             
         return context
+    
+    class EventDetailView(DetailView):
+        model = Event
+        template_name = 'localevents/event_detail.html'
+        context_object_name = 'event'
+
+        def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+            
+            # Check if the user is logged in and already signed up
+            if self.request.user.is_authenticated:
+                try:
+                    profile = self.request.user.profile
+                    # .exists() returns True if a signup record matches this user and event
+                    is_registered = EventSignup.objects.filter(
+                        user_registrant=profile, 
+                        event=self.object
+                    ).exists()
+                    context['is_registered'] = is_registered
+                except AttributeError:
+                    context['is_registered'] = False
+            else:
+                context['is_registered'] = False
+                
+            return context

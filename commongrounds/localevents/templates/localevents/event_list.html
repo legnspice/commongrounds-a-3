@@ -7,7 +7,7 @@
     <h3>Events You Organized</h3>
     <ul>
     {% for event in events_created %}
-        <li>{{ event.name }} - {{ event.date }} ({{ event.status }})</li>
+        <li><a href="{% url 'localevents:event_detail' event.id %}">{{ event.name }}</a> - {{ event.date }} ({{ event.status }})</li>
     {% empty %}
         <li>You haven't organized any events yet.</li>
     {% endfor %}
@@ -16,7 +16,7 @@
     <h3>Events You Joined</h3>
     <ul>
     {% for event in events_signed_up %}
-        <li>{{ event.name }} - {{ event.date }}</li>
+        <li><a href="{% url 'localevents:event_detail' event.id %}">{{ event.name }}</a> - {{ event.date }}</li>
     {% empty %}
         <li>You haven't joined any events yet.</li>
     {% endfor %}
@@ -30,7 +30,7 @@
 <ul>
 {% for event in all_events %}
     <li>
-        <strong>{{ event.name }}</strong><br>
+        <strong><a href="{% url 'localevents:event_detail' event.id %}">{{ event.name }}</a></strong><br>
         Organized by: {{ event.organizer }}<br>
         Date: {{ event.date }} | Location: {{ event.location }}
     </li>
