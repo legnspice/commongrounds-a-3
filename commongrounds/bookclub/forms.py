@@ -9,7 +9,7 @@ class BookReviewForm(forms.ModelForm):
 class BookContributeForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['title', 'genre', 'author', 'synopsis', 'publicationYear']
+        fields = ['title', 'genre', 'author', 'synopsis', 'publicationYear', 'availableToBorrow']
 
 
 class BookFormFactory:
