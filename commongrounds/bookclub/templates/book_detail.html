@@ -16,10 +16,14 @@
 
     <p>Available to Borrow: {% if book.availableToBorrow %} YES {% else %} NO {% endif %}</p>
     {% if book.availableToBorrow %}
-        <form method="get" action="#">
-            {# action="{% url 'bookclub:book_borrow' book.pk %}" #}
+        <form method="get" action="{% url 'bookclub:book_borrow' book.pk %}">
             <button type="submit">Borrow this book</button>
         </form>
+    {% endif %}
+
+    {% if book.borrows.borrower == user.profile%}
+    <p>You have borrowed this book</p>
+    <p><strong>Return Date</strong> {{book.borrows.dateToReturn}}</p>
     {% endif %}
 
     <h3>Reviews</h3>
@@ -38,9 +42,7 @@
     {% endfor %}
 
     {% if user.is_authenticated and book.contributor == user.profile %}
-        <p><a href="#"> Edit this book</a></p>
-        {# {% url 'bookclub:book_update' book.pk %} #}
+        <p><a href="{% url 'bookclub:book_edit' book.pk %}"> Edit this book</a></p>
     {% endif %}
-
 
 {% endblock %}
