@@ -7,7 +7,7 @@ urlpatterns = [
     path("book/<int:pk>", book_detail, name="book_detail"),
     path("book/<int:pk>/bookmark", bookmark_book, name="bookmark_book"),
     path("book/add", book_add, name="book_create"),
-    # path("book/<int:pk>/edit", name="book_edit"),
+    path("book/<int:pk>/edit", book_update ,name="book_edit"),
     # path("book/<int:pk>/borrow", name="book_borrow")
 ]
 
