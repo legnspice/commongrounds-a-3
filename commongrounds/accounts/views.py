@@ -20,3 +20,6 @@ def profile_update_view(request, username):
 
     context = {'form': form}
     return render(request, 'update_user.html', context)
+
+def permission_denied(request):
+    return render(request,'permission_denied.html')
