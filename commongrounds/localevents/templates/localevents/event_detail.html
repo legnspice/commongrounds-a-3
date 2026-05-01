@@ -23,7 +23,7 @@
             <button disabled style="background-color: red;">Event is Full</button>
         {% else %}
             <!-- We will build the actual submit logic for this next! -->
-            <form action="#" method="POST">
+            <form action="{% url 'localevents:event_signup' event.id %}" method="POST">
                 {% csrf_token %}
                 <button type="submit">Sign Up for Event</button>
             </form>
