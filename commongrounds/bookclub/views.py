@@ -91,3 +91,23 @@ def book_add(request):
 
     return render(request, "book_create.html", context)
 
+@role_required('Book Contributor')
+def book_update(request, pk):
+    book = Book.objects.get(pk=pk)  
+    bookForm = BookFormFactory.get_form('contribute')
+
+    if request.method == 'POST':
+        form = bookForm(instance=book)
+        if form.is_valid():
+            book = form.save(commit=False)
+            book.contributor = request.user.profile
+            book.save()
+            return redirect(book)
+    else:
+        form = bookForm(instance=book)
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, "book_create.html", context)
