@@ -63,7 +63,7 @@ class Favorite(models.Model):
     def __str__(self):
         return f"{self.profile} - {self.project}"
     
-    
+
 class ProjectReview(models.Model):
     reviewer = models.ForeignKey(
         Profile,
@@ -78,3 +78,18 @@ class ProjectReview(models.Model):
 
     def __str__(self):
         return f"{self.reviewer} - {self.project}"
+    
+
+class ProjectRating(models.Model):
+    profile = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+    )
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+    )
+    score = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.profile} - {self.project} - {self.score}"
