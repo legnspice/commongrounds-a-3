@@ -1,12 +1,31 @@
 {% extends 'merchstore/base_merchstore.html' %} {% block app_content %}
 <h1>Merchandise Store</h1>
 
+<a href="{% url 'merchstore:item_create' %}">Add a Product</a>
+
+{% if request.user.is_authenticated and my_products %}
+<h2>My Products</h2>
 <ul>
-  {% for product in object_list %}
+  {% for product in my_products %}
   <li>
-    <h2>{{ product.name }}</h2>
+    <h3>{{ product.name }}</h3>
     <p>Product Type: {{ product.product_type.name }}</p>
     <p><strong>Price:</strong> ${{ product.price }}</p>
+    <p>Stock: {{ product.stock }} | Status: {{ product.status }}</p>
+    <p><a href="{{ product.get_absolute_url }}">See Details</a></p>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<h2>All Products</h2>
+<ul>
+  {% for product in products %}
+  <li>
+    <h3>{{ product.name }}</h3>
+    <p>Product Type: {{ product.product_type.name }}</p>
+    <p><strong>Price:</strong> ${{ product.price }}</p>
+    <p>Stock: {{ product.stock }} | Status: {{ product.status }}</p>
     <p><a href="{{ product.get_absolute_url }}">See Details</a></p>
   </li>
   {% endfor %}

@@ -1,0 +1,21 @@
+{% extends 'merchstore/base_merchstore.html' %} {% block app_content %}
+
+<h1>My Transactions</h1>
+
+{% for buyer, transactions in grouped.items %}
+  <h2>Buyer: {{ buyer.displayName }}</h2>
+  <ul>
+    {% for t in transactions %}
+    <li>
+      <p>{{ t.product.name }} x{{ t.amount }}</p>
+      <p>Status: {{ t.status }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+{% empty %}
+  <p>No transactions yet.</p>
+{% endfor %}
+
+<a href="{% url 'merchstore:item_list' %}">Back to Store</a>
+
+{% endblock %}
