@@ -1,7 +1,9 @@
 .env
 db.sqlite3
-*.pyc
 */**/*.pyc
+myenv
+get-pip.py
+.prettierignore
 __pycache__/
 venv/
 .DS_Store
