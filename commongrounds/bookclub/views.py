@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
+from accounts.decorators import role_required
 from .models import Book, Bookmark
 from .forms import BookFormFactory
 
@@ -38,7 +39,7 @@ def book_list(request):
 def book_detail(request, pk):
     book = Book.objects.get(pk=pk)
 
-    reviewForm = BookFormFactory.get_form("review")
+    reviewForm = BookFormFactory.get_form('review')
 
     if request.method == 'POST':
         form = reviewForm(request.POST)
@@ -49,27 +50,44 @@ def book_detail(request, pk):
             if request.user.is_authenticated:
                 review.userReviewer = request.user.profile
             else:
-                review.anonReviewer = "Anonymous"
+                review.anonReviewer = 'Anonymous'
             
             review.save()
-            return redirect("bookclub:book_detail", pk=book.pk)
+            return redirect('bookclub:book_detail', pk=book.pk)
     else:
         form = reviewForm()
 
     bookmarkCount = book.bookmarks.count()
     context = {
-        "book": book,
-        "bookmarkCount": bookmarkCount,
-        "form": form
+        'book': book,
+        'bookmarkCount': bookmarkCount,
+        'form': form
     }
-    return render(request, "book_detail.html", context)
+    return render(request, 'book_detail.html', context)
 
 @login_required
 def bookmark_book(request, pk):
     book = Book.objects.get(pk=pk)
     Bookmark.objects.get_or_create(profile=request.user.profile, book=book)
-    return redirect("bookclub:book_detail", pk=book.pk)
+    return redirect('bookclub:book_detail', pk=book.pk)
 
-@login_required
+@role_required('Book Contributor')
 def book_add(request):
-    addForm = BookFormFactory("contribute")
+    bookForm = BookFormFactory.get_form('contribute')
+
+    if request.method == 'POST':
+        form = bookForm(request.POST)
+        if form.is_valid():
+            book = form.save(commit=False)
+            book.contributor = request.user.profile
+            book.save()
+            return redirect(book)
+    else:
+        form = bookForm()
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, "book_create.html", context)
+

@@ -7,8 +7,8 @@ def role_required(required_role):
                 if request.user.profile.role == required_role:
                     return view_func(request, *args, **kwargs)
                 else:
-                    return redirect("accounts:permission_denied")
+                    return redirect('accounts:permission_denied')
             else:
-                return redirect("login")
+                return redirect('login')
         return wrapped
     return decorator
