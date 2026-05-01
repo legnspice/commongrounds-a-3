@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 from .forms import EventForm
 
@@ -83,24 +83,58 @@ class EventCreateView(LoginRequiredMixin, CreateView):
         form.instance.organizer = self.request.user.profile
         return super().form_valid(form)
     
-class EventSignUpView(LoginRequiredMixin, View):
+class BaseSignupView(View):
+    """
+    Abstract base CBV defining the Template Method skeleton.
+    """
     def post(self, request, pk):
-        # 1. Fetch the exact event the user is looking at
+        # The Skeleton Algorithm
         event = get_object_or_404(Event, pk=pk)
-        profile = request.user.profile
-
-        # 2. Double-check they aren't already registered
-        is_registered = EventSignup.objects.filter(user_registrant=profile, event=event).exists()
         
-        # 3. Double-check the event isn't full
-        is_full = event.signups.count() >= event.capacity
+        # Only create the signup if capacity allows and they aren't the organizer
+        if self.check_capacity(event) and self.check_ownership(event, request.user):
+            self.create_signup(event, request.user)
+            
+        return redirect(self.get_redirect_url(event))
 
-        # 4. If everything is clear, create the signup record!
-        if not is_registered and not is_full:
-            EventSignup.objects.create(user_registrant=profile, event=event)
+    # --- Abstract Methods to be overridden ---
+    def check_capacity(self, event):
+        raise NotImplementedError
 
-        # 5. Send them right back to the detail page they were just looking at
-        return redirect('localevents:event_detail', pk=pk)
+    def check_ownership(self, event, user):
+        raise NotImplementedError
+
+    def create_signup(self, event, user):
+        raise NotImplementedError
+
+    def get_redirect_url(self, event):
+        raise NotImplementedError
+
+
+class EventSignupView(BaseSignupView):
+    """
+    Concrete subclass implementing the Local Events specific logic.
+    """
+    def check_capacity(self, event):
+        # Returns True if signup is still allowed
+        return event.signups.count() < event.capacity
+
+    def check_ownership(self, event, user):
+        # Returns True if the user is NOT the organizer
+        if user.is_authenticated and hasattr(user, 'profile'):
+            return user.profile != event.organizer
+        return True 
+
+    def create_signup(self, event, user):
+        # Creates the signup record, preventing duplicates
+        if user.is_authenticated and hasattr(user, 'profile'):
+            profile = user.profile
+            if not EventSignup.objects.filter(user_registrant=profile, event=event).exists():
+                EventSignup.objects.create(user_registrant=profile, event=event)
+
+    def get_redirect_url(self, event):
+        # Demonstrably overriding the method as required by the spec
+        return reverse('localevents:event_detail', kwargs={'pk': event.pk})
     
 class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Event
