@@ -14,25 +14,15 @@
         <button type="submit">Bookmark this book</button>
     </form>
 
-    <p>Available to Borrow: {% if book.availableToBorrow %} YES {% else %} NO {% endif %}</p>
-    {% if book.availableToBorrow %}
-        <form method="get" action="{% url 'bookclub:book_borrow' book.pk %}">
-            <button type="submit">Borrow this book</button>
-        </form>
-    {% endif %}
-
-    {% if book.borrows.borrower == user.profile%}
-    <p>You have borrowed this book</p>
-    <p><strong>Return Date</strong> {{book.borrows.dateToReturn}}</p>
-    {% endif %}
-
     <h3>Reviews</h3>
     <form method="post">
         {% csrf_token%}
         {{ form.as_p }}
         <button type="submit">Submit Review</button>
     </form>
+
     <hr style="color: black;">
+
     {% for review in book.reviews.all %}
         <p> {% if review.userReviewer %} {{review.userReviewer.displayName}} {% else %} {{review.anonReviewer}} {% endif %}</p> 
         <p> <strong> {{review.title}} </strong></p>
@@ -44,5 +34,32 @@
     {% if user.is_authenticated and book.contributor == user.profile %}
         <p><a href="{% url 'bookclub:book_edit' book.pk %}"> Edit this book</a></p>
     {% endif %}
+
+    <hr style="color: black;">
+    
+    <p>Available to Borrow: {% if book.availableToBorrow %} YES {% else %} NO {% endif %}</p>
+    {% if book.availableToBorrow %}
+        <form method="get" action="{% url 'bookclub:book_borrow' book.pk %}">
+            <button type="submit">Borrow this book</button>
+        </form>
+    {% endif %}
+
+    <h3>Borrow History</h3>
+    <ul>
+        {% for borrow in book.borrows.all %}
+            <li>
+                Borrowed by 
+                {% if borrow.borrower %}
+                    {{ borrow.borrower.displayName }}
+                {% else %}
+                    {{ borrow.name }}
+                {% endif %}
+                on {{ borrow.dateBorrowed|date:"Y-m-d" }} —
+                return by {{ borrow.dateToReturn|date:"Y-m-d" }}
+            </li>
+        {% empty %}
+            <li>This book has not been borrowed yet.</li>
+        {% endfor %}
+    </ul>
 
 {% endblock %}

@@ -48,6 +48,9 @@ class BookReview(models.Model):
     title = models.CharField(max_length=255)
     comment = models.TextField()
 
+    def __str__(self):
+        return f"{self.title} - {self.book.title}"
+
 class Bookmark(models.Model):
     profile = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="bookmarks"
@@ -56,6 +59,9 @@ class Bookmark(models.Model):
         Book, on_delete=models.CASCADE, related_name="bookmarks"
     )
     dateBookmarked = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.profile} bookmarked {self.book}"
 
 class Borrow(models.Model):
     book = models.ForeignKey(
@@ -67,3 +73,6 @@ class Borrow(models.Model):
     name = models.CharField(max_length=255, blank=True)
     dateBorrowed = models.DateField()
     dateToReturn = models.DateField()
+    
+    def __str__(self):
+        return f"{self.book} borrowed by {self.borrower or self.name}"
