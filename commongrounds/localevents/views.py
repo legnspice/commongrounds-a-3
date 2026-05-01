@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -99,3 +101,33 @@ class EventSignUpView(LoginRequiredMixin, View):
 
         # 5. Send them right back to the detail page they were just looking at
         return redirect('localevents:event_detail', pk=pk)
+    
+class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'localevents/event_form.html'
+    
+    # Send them back to the detail page after editing
+    def get_success_url(self):
+        return reverse_lazy('localevents:event_detail', kwargs={'pk': self.object.pk})
+
+    # SECURITY: Only let the organizer edit this event
+    def test_func(self):
+        event = self.get_object()
+        try:
+            return self.request.user.profile == event.organizer
+        except AttributeError:
+            return False
+
+class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Event
+    template_name = 'localevents/event_confirm_delete.html'
+    success_url = reverse_lazy('localevents:event_list')
+
+    # SECURITY: Only let the organizer delete this event
+    def test_func(self):
+        event = self.get_object()
+        try:
+            return self.request.user.profile == event.organizer
+        except AttributeError:
+            return False

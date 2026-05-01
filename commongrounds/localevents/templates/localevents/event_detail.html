@@ -15,6 +15,18 @@
     <p>{{ event.description }}</p>
     <hr>
 
+    <!-- Organizer Controls -->
+    {% if user.is_authenticated and user.profile == event.organizer %}
+        <div style="margin-bottom: 15px;">
+            <a href="{% url 'localevents:event_update' event.id %}">
+                <button style="background-color: orange;">Edit Event</button>
+            </a>
+            <a href="{% url 'localevents:event_delete' event.id %}">
+                <button style="background-color: darkred; color: white;">Delete Event</button>
+            </a>
+        </div>
+    {% endif %}
+    
     <!-- Sign Up Logic -->
     {% if user.is_authenticated %}
         {% if is_registered %}
