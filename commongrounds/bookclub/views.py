@@ -38,10 +38,10 @@ def book_list(request):
 def book_detail(request, pk):
     book = Book.objects.get(pk=pk)
 
-    ReviewForm = BookFormFactory.get_form("review")
+    reviewForm = BookFormFactory.get_form("review")
 
     if request.method == 'POST':
-        form = ReviewForm(request.POST)
+        form = reviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
             review.book = book
@@ -54,7 +54,7 @@ def book_detail(request, pk):
             review.save()
             return redirect("bookclub:book_detail", pk=book.pk)
     else:
-        form = ReviewForm()
+        form = reviewForm()
 
     bookmarkCount = book.bookmarks.count()
     context = {
@@ -69,3 +69,7 @@ def bookmark_book(request, pk):
     book = Book.objects.get(pk=pk)
     Bookmark.objects.get_or_create(profile=request.user.profile, book=book)
     return redirect("bookclub:book_detail", pk=book.pk)
+
+@login_required
+def book_add(request):
+    addForm = BookFormFactory("contribute")
