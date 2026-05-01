@@ -131,3 +131,20 @@ class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return self.request.user.profile == event.organizer
         except AttributeError:
             return False
+
+class EventCancelSignUpView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        # 1. Fetch the exact event
+        event = get_object_or_404(Event, pk=pk)
+        profile = request.user.profile
+
+        # 2. Find the specific signup record for this user and event
+        signup = EventSignup.objects.filter(user_registrant=profile, event=event).first()
+        
+        # 3. If the record exists, delete it!
+        if signup:
+            signup.delete()
+
+        # 4. Refresh the detail page
+        return redirect('localevents:event_detail', pk=pk)
+    

@@ -26,11 +26,14 @@
             </a>
         </div>
     {% endif %}
-    
+
     <!-- Sign Up Logic -->
     {% if user.is_authenticated %}
         {% if is_registered %}
-            <button disabled style="background-color: grey;">You are already registered!</button>
+            <form action="{% url 'localevents:event_cancel' event.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" style="background-color: grey; color: white;">Cancel RSVP</button>
+            </form>
         {% elif event.signups.count >= event.capacity %}
             <button disabled style="background-color: red;">Event is Full</button>
         {% else %}
