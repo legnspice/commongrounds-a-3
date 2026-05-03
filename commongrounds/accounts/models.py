@@ -6,3 +6,6 @@ class Profile(models.Model):
     displayName = models.CharField(max_length=63)
     emailAddress = models.EmailField()
 
+    def __str__(self):
+        return self.displayName
+
