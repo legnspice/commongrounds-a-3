@@ -1,41 +1,58 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Community Events</h2>
+<div class="container mt-4">
+    <h2>Community Events</h2>
 
-{% if user.is_authenticated %}
-    <h3>Events You Organized</h3>
+    {% if user.is_authenticated %}
+        
+        <h3>Events You Organized</h3>
+        <ul>
+            {% for event in organized_events %}
+                <li>
+                    <a href="{% url 'localevents:event_detail' event.pk %}">{{ event.title }}</a>
+                    - {{ event.start_time|date:"M d, Y, h:i A" }} ({{ event.status }})
+                </li>
+            {% empty %}
+                <li>You haven't organized any events yet.</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Events You Joined</h3>
+        <ul>
+            {% for event in joined_events %}
+                <li>
+                    <a href="{% url 'localevents:event_detail' event.pk %}">{{ event.title }}</a>
+                    - {{ event.start_time|date:"M d, Y, h:i A" }}
+                </li>
+            {% empty %}
+                <li>You haven't joined any events yet.</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Other Upcoming Events</h3>
+        
+    {% else %}
+        <h3>All Events</h3>
+    {% endif %}
+
     <ul>
-    {% for event in events_created %}
-        <li><a href="{% url 'localevents:event_detail' event.id %}">{{ event.name }}</a> - {{ event.date }} ({{ event.status }})</li>
-    {% empty %}
-        <li>You haven't organized any events yet.</li>
-    {% endfor %}
+        {% for event in other_events %}
+            <li class="mb-3">
+                <strong><a href="{% url 'localevents:event_detail' event.pk %}">{{ event.title }}</a>
+                
+                Organized by: 
+                {% for org in event.organizer.all %}
+                    {{ org }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    No organizer listed
+                {% endfor %}<br>
+                
+                Date: {{ event.start_time|date:"M d, Y" }} | Location: {{ event.location }}
+            </li>
+        {% empty %}
+            <li>No other events available right now.</li>
+        {% endfor %}
     </ul>
-
-    <h3>Events You Joined</h3>
-    <ul>
-    {% for event in events_signed_up %}
-        <li><a href="{% url 'localevents:event_detail' event.id %}">{{ event.name }}</a> - {{ event.date }}</li>
-    {% empty %}
-        <li>You haven't joined any events yet.</li>
-    {% endfor %}
-    </ul>
-
-    <h3>Other Upcoming Events</h3>
-{% else %}
-    <h3>All Events</h3>
-{% endif %}
-
-<ul>
-{% for event in all_events %}
-    <li>
-        <strong><a href="{% url 'localevents:event_detail' event.id %}">{{ event.name }}</a></strong><br>
-        Organized by: {{ event.organizer }}<br>
-        Date: {{ event.date }} | Location: {{ event.location }}
-    </li>
-{% empty %}
-    <li>No other events available right now.</li>
-{% endfor %}
-</ul>
+</div>
 {% endblock %}
