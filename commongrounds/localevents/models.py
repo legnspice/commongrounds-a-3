@@ -2,7 +2,7 @@ from django.db import models
 from accounts.models import Profile 
 
 class EventType(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=255)
     description = models.TextField()
 
     def __str__(self):
@@ -10,14 +10,14 @@ class EventType(models.Model):
 
 class Event(models.Model):
     STATUS_CHOICES = (
-        ('upcoming', 'Upcoming'),
-        ('ongoing', 'Ongoing'),
-        ('completed', 'Completed'),
-        ('full', 'Full'), # Added 'full' for the automated status requirement
+        ('Available', 'Available'),
+        ('Full', 'Full'),
+        ('Done', 'Done'),
+        ('Cancelled', 'Cancelled'),
     )
 
     # Fields renamed exactly as per rubric
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=255)
     category = models.ForeignKey(EventType, on_delete=models.SET_NULL, null=True, related_name='events')
     organizer = models.ManyToManyField(Profile, related_name='organized_events') # Changed to ManyToMany
     location = models.CharField(max_length=200)
@@ -26,7 +26,7 @@ class Event(models.Model):
     description = models.TextField()
     event_capacity = models.PositiveIntegerField(default=50) # Renamed from capacity
     event_image = models.ImageField(upload_to='events/', null=True, blank=True) # New field
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='upcoming')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Available')
     
     # Audit fields required by most CSCI rubrics
     created_on = models.DateTimeField(auto_now_add=True)

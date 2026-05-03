@@ -5,6 +5,10 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy, reverse
+from django.views.generic import View
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from .models import Event, EventSignup
 
 from .forms import EventForm
 
@@ -93,54 +97,59 @@ class BaseSignupView(View):
     """
     Abstract base CBV defining the Template Method skeleton.
     """
-    def post(self, request, pk):
-        # The Skeleton Algorithm
+    def post(self, request, pk, *args, **kwargs):
         event = get_object_or_404(Event, pk=pk)
-        
-        # Only create the signup if capacity allows and they aren't the organizer
-        if self.check_capacity(event) and self.check_ownership(event, request.user):
-            self.create_signup(event, request.user)
-            
+
+        if not self.check_capacity(event):
+            messages.error(request, "This event is full.")
+            return redirect(self.get_redirect_url(event))
+
+        if not self.check_ownership(event, request.user):
+            messages.error(request, "You cannot sign up for your own event.")
+            return redirect(self.get_redirect_url(event))
+
+        self.create_signup(event, request.user, request.POST)
+        messages.success(request, "Successfully signed up!")
         return redirect(self.get_redirect_url(event))
 
-    # --- Abstract Methods to be overridden ---
+    # --- The Overridable Steps ---
     def check_capacity(self, event):
-        raise NotImplementedError
+        return event.signups.count() < event.event_capacity
 
     def check_ownership(self, event, user):
-        raise NotImplementedError
+        if user.is_authenticated and hasattr(user, 'profile'):
+            return user.profile not in event.organizer.all()
+        return True # Guests don't own events
 
-    def create_signup(self, event, user):
-        raise NotImplementedError
+    def create_signup(self, event, user, post_data):
+        raise NotImplementedError("Subclasses must implement create_signup")
 
     def get_redirect_url(self, event):
-        raise NotImplementedError
+        # Default redirect
+        return reverse('localevents:event_detail', kwargs={'pk': event.pk})
 
 
 class EventSignupView(BaseSignupView):
     """
-    Concrete subclass implementing the Local Events specific logic.
+    Concrete implementation of the BaseSignupView for Local Events.
+    Demonstrates overriding the create_signup method.
     """
-    def check_capacity(self, event):
-        # Returns True if signup is still allowed
-        return event.signups.count() < event.capacity
-
-    def check_ownership(self, event, user):
-        # Returns True if the user is NOT the organizer
+    
+    def create_signup(self, event, user, post_data):
         if user.is_authenticated and hasattr(user, 'profile'):
-            return user.profile != event.organizer
-        return True 
-
-    def create_signup(self, event, user):
-        # Creates the signup record, preventing duplicates
-        if user.is_authenticated and hasattr(user, 'profile'):
-            profile = user.profile
-            if not EventSignup.objects.filter(user_registrant=profile, event=event).exists():
-                EventSignup.objects.create(user_registrant=profile, event=event)
-
-    def get_redirect_url(self, event):
-        # Demonstrably overriding the method as required by the spec
-        return reverse('localevents:event_detail', kwargs={'pk': event.pk})
+            # Logged in user signup
+            EventSignup.objects.create(
+                user_registrant=user.profile,
+                event=event
+            )
+        else:
+            # Guest signup (requires a 'new_registrant' name from the form)
+            guest_name = post_data.get('new_registrant')
+            if guest_name:
+                EventSignup.objects.create(
+                    new_registrant=guest_name,
+                    event=event
+                )
     
 class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Event
