@@ -73,15 +73,21 @@ class EventCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('localevents:event_list')
 
     def test_func(self):
-        # SECURITY: Only allows logged-in users with the Event Organizer role
+        # SECURITY: Uses your groupmate's new has_role() method
         if self.request.user.is_authenticated and hasattr(self.request.user, 'profile'):
-            return self.request.user.profile.role == 'Event Organizer'
+            return self.request.user.profile.has_role('Event Organizer')
         return False
 
     def form_valid(self, form):
-        # Automatically set the organizer to the logged-in user's profile
-        form.instance.organizer = self.request.user.profile
-        return super().form_valid(form)
+        # 1. Let Django save the basic Event to the database first
+        response = super().form_valid(form)
+        
+        # 2. Now that the Event exists, attach the logged-in user to the M2M field
+        if hasattr(self.request.user, 'profile'):
+            self.object.organizer.add(self.request.user.profile)
+            
+        # 3. Proceed to the success URL
+        return response
     
 class BaseSignupView(View):
     """
@@ -152,9 +158,9 @@ class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     # SECURITY: Only let the organizer edit this event
     def test_func(self):
-        # SECURITY: Only allows logged-in users with the Event Organizer role
+        # SECURITY: Uses your groupmate's new has_role() method
         if self.request.user.is_authenticated and hasattr(self.request.user, 'profile'):
-            return self.request.user.profile.role == 'Event Organizer'
+            return self.request.user.profile.has_role('Event Organizer')
         return False
 
 class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
