@@ -85,9 +85,9 @@ class BaseSignupView(View):
             messages.error(request, "You cannot sign up for your own event.")
             return redirect(self.get_redirect_url(event))
 
-        self.create_signup(event, request.user, request.POST)
+        # Rubric strict signature: (event, user)
+        self.create_signup(event, request.user)
         
-        # Auto-update status if capacity is reached after signup
         if event.signups.count() >= event.event_capacity:
             event.status = 'Full'
             event.save()
@@ -103,7 +103,7 @@ class BaseSignupView(View):
             return user.profile not in event.organizer.all()
         return True
 
-    def create_signup(self, event, user, post_data):
+    def create_signup(self, event, user):
         raise NotImplementedError("Subclasses must implement create_signup")
 
     def get_redirect_url(self, event):
@@ -113,11 +113,20 @@ class BaseSignupView(View):
 class EventSignupView(BaseSignupView):
     """Concrete implementation of the BaseSignupView."""
     
-    def create_signup(self, event, user, post_data):
+    def get(self, request, pk):
+        """Rubric Requirement: Dedicated form view for guests."""
+        event = get_object_or_404(Event, pk=pk)
+        if request.user.is_authenticated:
+            # Logged in users shouldn't see the form, they 1-click sign up
+            return redirect('localevents:event_detail', pk=pk)
+        return render(request, 'localevents/event_signup.html', {'event': event})
+
+    def create_signup(self, event, user):
         if user.is_authenticated and hasattr(user, 'profile'):
             EventSignup.objects.create(user_registrant=user.profile, event=event)
         else:
-            guest_name = post_data.get('new_registrant')
+            # We pull the data directly from the class request object
+            guest_name = self.request.POST.get('new_registrant')
             if guest_name:
                 EventSignup.objects.create(new_registrant=guest_name, event=event)
 

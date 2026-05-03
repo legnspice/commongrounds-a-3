@@ -35,22 +35,16 @@
             <p class="text-success mt-2"><em>You are signed up for this event!</em></p>
 
         {% else %}
-            <form action="{% url 'localevents:event_signup' event.pk %}" method="POST">
-                {% csrf_token %}
-                
-                {% if not user.is_authenticated %}
-                    <div style="margin-bottom: 10px;">
-                        <label for="new_registrant"><strong>Guest Name:</strong></label>
-                        <input type="text" name="new_registrant" id="new_registrant" required placeholder="Enter your full name">
-                    </div>
-                {% endif %}
-
-                {% if event.signups.count >= event.event_capacity %}
-                    <button type="submit" class="btn btn-secondary" disabled>Event Full</button>
-                {% else %}
+            {% if event.signups.count >= event.event_capacity %}
+                <button class="btn btn-secondary" disabled>Event Full</button>
+            {% elif user.is_authenticated %}
+                <form action="{% url 'localevents:event_signup' event.pk %}" method="POST">
+                    {% csrf_token %}
                     <button type="submit" class="btn btn-primary">Sign Up for Event</button>
-                {% endif %}
-            </form>
+                </form>
+            {% else %}
+                <a href="{% url 'localevents:event_signup' event.pk %}" class="btn btn-primary">Sign Up for Event</a>
+            {% endif %}
         {% endif %}
     </div>
 </div>

@@ -9,6 +9,9 @@ class EventType(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
 
+    class Meta:
+        ordering = ['name']  # Rubric Ascending Order!
+
     def __str__(self):
         return self.name
 
