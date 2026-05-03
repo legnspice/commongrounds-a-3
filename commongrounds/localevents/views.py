@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView, View
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -119,7 +119,14 @@ class EventSignupView(BaseSignupView):
         if request.user.is_authenticated:
             # Logged in users shouldn't see the form, they 1-click sign up
             return redirect('localevents:event_detail', pk=pk)
-        return render(request, 'localevents/event_signup.html', {'event': event})
+            
+        # Do the math safely in Python
+        spots_left = event.event_capacity - event.signups.count()
+        
+        return render(request, 'localevents/event_signup.html', {
+            'event': event, 
+            'spots_remaining': spots_left
+        })
 
     def create_signup(self, event, user):
         if user.is_authenticated and hasattr(user, 'profile'):

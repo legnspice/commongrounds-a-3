@@ -7,7 +7,7 @@
     <div class="card mb-4" style="padding: 15px; background-color: #f9f9f9; border: 1px solid #ddd;">
         <p><strong>Date:</strong> {{ event.start_time }}</p>
         <p><strong>Location:</strong> {{ event.location }}</p>
-        <p><strong>Capacity Remaining:</strong> {{ event.event_capacity|add:"-"|add:event.signups.count }} spots left</p>
+        <p><strong>Capacity Remaining:</strong> {{ spots_remaining }} spots left</p>
     </div>
 
     <form method="POST">
