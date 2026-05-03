@@ -1,19 +1,55 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>DIY Projects</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}DIY Projects{% endblock %}
+
+{% block content %}
     <h1>DIY Projects</h1>
-    <ul>
-        {% for project in projects %}
-        <li>
-            <a href="/diyprojects/project/{{ project.pk }}">{{ project.title }}</a>
-            - {{ project.category }} - {{ project.created_on }}
-        </li>
-        {% empty %}
-        <li>No projects yet.</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+    <a href="{% url 'diyprojects:project_create' %}">Create a Project</a>
+
+    {% if request.user.is_authenticated %}
+        <h2>Projects Created</h2>
+        <ul>
+            {% for project in created %}
+                <li><a href="{% url 'diyprojects:project_detail' pk=project.pk %}">{{ project.title }}</a> - {{ project.category }} - {{ project.created_on }}</li>
+            {% empty %}
+                <li>No projects created yet.</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Projects Favorited</h2>
+        <ul>
+            {% for project in favorited %}
+                <li><a href="{% url 'diyprojects:project_detail' pk=project.pk %}">{{ project.title }}</a> - {{ project.category }} - {{ project.created_on }}</li>
+            {% empty %}
+                <li>No projects favorited yet.</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Projects Reviewed</h2>
+        <ul>
+            {% for project in reviewed %}
+                <li><a href="{% url 'diyprojects:project_detail' pk=project.pk %}">{{ project.title }}</a> - {{ project.category }} - {{ project.created_on }}</li>
+            {% empty %}
+                <li>No projects reviewed yet.</li>
+            {% endfor %}
+        </ul>
+
+        <h2>All Projects</h2>
+        <ul>
+            {% for project in remaining %}
+                <li><a href="{% url 'diyprojects:project_detail' pk=project.pk %}">{{ project.title }}</a> - {{ project.category }} - {{ project.created_on }}</li>
+            {% empty %}
+                <li>No other projects.</li>
+            {% endfor %}
+        </ul>
+
+    {% else %}
+        <ul>
+            {% for project in projects %}
+                <li><a href="{% url 'diyprojects:project_detail' pk=project.pk %}">{{ project.title }}</a> - {{ project.category }} - {{ project.created_on }}</li>
+            {% empty %}
+                <li>No projects yet.</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

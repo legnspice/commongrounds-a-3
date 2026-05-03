@@ -6,7 +6,21 @@ from .forms import ProjectForm
 
 def project_list(request):
     projects = Project.objects.all()
-    return render(request, 'diyprojects/project_list.html', {'projects': projects})
+    context = {'projects': projects}
+
+    if request.user.is_authenticated:
+        profile = request.user.profile
+        created = Project.objects.filter(creator=profile)
+        favorited = Project.objects.filter(favorite__profile=profile)
+        reviewed = Project.objects.filter(projectreview__reviewer=profile)
+        all_grouped = created | favorited | reviewed
+        remaining = projects.exclude(pk__in=all_grouped.values('pk'))
+        context['created'] = created
+        context['favorited'] = favorited
+        context['reviewed'] = reviewed
+        context['remaining'] = remaining
+
+    return render(request, 'diyprojects/project_list.html', context)
 
 
 def project_detail(request, pk):
