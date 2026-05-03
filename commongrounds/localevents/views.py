@@ -78,6 +78,12 @@ class EventCreateView(LoginRequiredMixin, CreateView):
     template_name = 'localevents/event_form.html'
     success_url = reverse_lazy('localevents:event_list')
 
+    def test_func(self):
+        # SECURITY: Only allows logged-in users with the Event Organizer role
+        if self.request.user.is_authenticated and hasattr(self.request.user, 'profile'):
+            return self.request.user.profile.role == 'Event Organizer'
+        return False
+
     def form_valid(self, form):
         # Automatically set the organizer to the logged-in user's profile
         form.instance.organizer = self.request.user.profile
@@ -147,11 +153,10 @@ class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     # SECURITY: Only let the organizer edit this event
     def test_func(self):
-        event = self.get_object()
-        try:
-            return self.request.user.profile == event.organizer
-        except AttributeError:
-            return False
+        # SECURITY: Only allows logged-in users with the Event Organizer role
+        if self.request.user.is_authenticated and hasattr(self.request.user, 'profile'):
+            return self.request.user.profile.role == 'Event Organizer'
+        return False
 
 class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Event
