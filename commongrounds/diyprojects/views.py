@@ -1,5 +1,7 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib.auth.decorators import login_required
 from .models import Project
+from .forms import ProjectForm
 
 
 def project_list(request):
@@ -10,3 +12,17 @@ def project_list(request):
 def project_detail(request, pk):
     project = get_object_or_404(Project, pk=pk)
     return render(request, 'diyprojects/project_detail.html', {'project': project})
+
+
+@login_required
+def project_create(request):
+    if request.method == 'POST':
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.creator = request.user.profile
+            project.save()
+            return redirect('diyprojects:project_detail', pk=project.pk)
+    else:
+        form = ProjectForm()
+    return render(request, 'diyprojects/project_create.html', {'form': form})
