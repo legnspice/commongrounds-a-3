@@ -9,6 +9,6 @@ def role_required(required_role):
             if not request.user.profile.has_role(required_role):
                 return redirect("accounts:permission_denied")
             
-            return view_func(*args, **kwargs)
+            return view_func(request, *args, **kwargs)
         return wrapped
     return decorator
