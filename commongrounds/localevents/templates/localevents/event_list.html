@@ -39,7 +39,7 @@
     <ul>
         {% for event in other_events %}
             <li class="mb-3">
-                <strong><a href="{% url 'localevents:event_detail' event.pk %}">{{ event.title }}</a>
+                <strong><a href="{% url 'localevents:event_detail' event.pk %}">{{ event.title }}</a></strong><br>
                 
                 Organized by: 
                 {% for org in event.organizer.all %}

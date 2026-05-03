@@ -4,12 +4,11 @@
 <div class="event-form">
     <h2>{% if object %}Update Your Event{% else %}Create a New Community Event{% endif %}</h2>
     
-    <form method="POST">
-        <!-- Always include the csrf_token for security! -->
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         
-        <button type="submit">Publish Event</button>
+        <button type="submit" class="btn btn-primary">Publish Event</button>
     </form>
 
     <br>

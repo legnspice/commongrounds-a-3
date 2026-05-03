@@ -3,7 +3,7 @@
 {% block content %}
 <div class="event-delete">
     <h2>Cancel Event</h2>
-    <p>Are you absolutely sure you want to permanently cancel and delete the event: <strong>"{{ object.name }}"</strong>?</p>
+    <p>Are you absolutely sure you want to permanently cancel and delete the event: <strong>"{{ object.title }}"</strong>?</p>
     
     <form method="POST">
         {% csrf_token %}
@@ -11,6 +11,6 @@
     </form>
     
     <br>
-    <a href="{% url 'localevents:event_detail' object.id %}">Nevermind, take me back.</a>
+    <a href="{% url 'localevents:event_detail' object.pk %}">Nevermind, take me back.</a>
 </div>
 {% endblock %}
