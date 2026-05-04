@@ -5,7 +5,7 @@ class RoleRequiredMixin:
     
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect("login")
+            return redirect('login')
         
         if not request.user.profile.has_role(self.required_role):
             return redirect("accounts:permission_denied")

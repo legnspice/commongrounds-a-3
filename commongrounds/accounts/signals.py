@@ -6,5 +6,4 @@ from .models import Profile
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        # get_or_create prevents the "UNIQUE constraint failed" error
         Profile.objects.get_or_create(user=instance)

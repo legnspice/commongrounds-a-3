@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 
 class Role(models.Model):
     ROLE_CHOICES = [
-        ("Reader", "Reader"),
         ("Market Seller", "Market Seller"),
         ("Event Organizer", "Event Organizer"),
         ("Book Contributor", "Book Contributor"),

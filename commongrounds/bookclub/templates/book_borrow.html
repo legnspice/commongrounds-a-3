@@ -1,0 +1,14 @@
+{% extends 'base.html' %} 
+{% block content %}
+    <h2>Borrowing a Book</h2>
+    <p><strong>Title:</strong> {{book.title}} </p>
+    <p><strong>Author:</strong> {{book.author}} </p>
+    <p><strong>Genre:</strong> {{book.genre}} </p>
+    <p><strong>Synopsis:</strong></p>
+    <p>{{book.synopsis}}</p>
+    <form method="post">
+        {% csrf_token%}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}
