@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="event-form">
+    <h2>{% if object %}Update Your Event{% else %}Create a New Community Event{% endif %}</h2>
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+        <button type="submit" class="btn btn-primary">Publish Event</button>
+    </form>
+
+    <br>
+    <a href="{% url 'localevents:event_list' %}">Cancel and Return</a>
+</div>
+{% endblock %}

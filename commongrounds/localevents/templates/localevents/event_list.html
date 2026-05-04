@@ -1,20 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Local Events</title>
-</head>
-<body>
-    <h1>Local Events</h1>
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Community Events</h2>
+
+    {% if user.is_authenticated %}
+        
+        <h3>Events You Organized</h3>
+        <ul>
+            {% for event in organized_events %}
+                <li>
+                    <a href="{% url 'localevents:event_detail' event.pk %}">{{ event.title }}</a>
+                    - {{ event.start_time|date:"M d, Y, h:i A" }} ({{ event.status }})
+                </li>
+            {% empty %}
+                <li>You haven't organized any events yet.</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Events You Joined</h3>
+        <ul>
+            {% for event in joined_events %}
+                <li>
+                    <a href="{% url 'localevents:event_detail' event.pk %}">{{ event.title }}</a>
+                    - {{ event.start_time|date:"M d, Y, h:i A" }}
+                </li>
+            {% empty %}
+                <li>You haven't joined any events yet.</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Other Upcoming Events</h3>
+        
+    {% else %}
+        <h3>All Events</h3>
+    {% endif %}
+
     <ul>
-        {% for event in events %}
-            <li>
-                <a href="{% url 'localevents:event_detail' event.pk %}">{{ event.title }}</a> 
-                - Starts: {{ event.start_time|date:"F j, Y, g:i a" }}
+        {% for event in other_events %}
+            <li class="mb-3">
+                <strong><a href="{% url 'localevents:event_detail' event.pk %}">{{ event.title }}</a></strong><br>
+                
+                Organized by: 
+                {% for org in event.organizer.all %}
+                    {{ org }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    No organizer listed
+                {% endfor %}<br>
+                
+                Date: {{ event.start_time|date:"M d, Y" }} | Location: {{ event.location }}
             </li>
         {% empty %}
-            <li>No local events available at this time.</li>
+            <li>No other events available right now.</li>
         {% endfor %}
     </ul>
-</body>
-</html>
+</div>
+{% endblock %}
