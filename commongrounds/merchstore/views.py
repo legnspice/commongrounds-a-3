@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.views.generic import DetailView, ListView, View
 from django.views.generic.edit import CreateView, UpdateView, FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
+from accounts.mixins import RoleRequiredMixin
 
 from .models import Product, Transaction
 from .forms import ProductForm, ProductUpdateForm, TransactionForm
@@ -50,8 +51,8 @@ class ItemDetailView(FormMixin, DetailView):
             strategy = GuestPurchaseStrategy()
         return strategy.execute(self.request, self.object, form)
 
-
-class ProductCreateView(LoginRequiredMixin, CreateView):
+class ProductCreateView(RoleRequiredMixin,LoginRequiredMixin, CreateView):
+    required_role = 'Market Seller'
     model = Product
     form_class = ProductForm
     template_name = 'merchstore/product_form.html'
@@ -60,8 +61,8 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         form.instance.owner = self.request.user.profile
         return super().form_valid(form)
 
-
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
+class ProductUpdateView(RoleRequiredMixin,LoginRequiredMixin, UpdateView):
+    required_role = 'Market Seller'
     model = Product
     form_class = ProductUpdateForm
     template_name = 'merchstore/product_form.html'
@@ -74,7 +75,6 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
             product.status = 'Available'
         product.save()
         return redirect(product.get_absolute_url())
-
 
 class CartView(LoginRequiredMixin, ListView):
     model = Transaction
@@ -93,7 +93,6 @@ class CartView(LoginRequiredMixin, ListView):
         context['grouped'] = grouped
         return context
 
-
 class TransactionListView(LoginRequiredMixin, ListView):
     model = Transaction
     template_name = 'merchstore/transactions.html'
@@ -110,7 +109,6 @@ class TransactionListView(LoginRequiredMixin, ListView):
             grouped.setdefault(t.buyer, []).append(t)
         context['grouped'] = grouped
         return context
-
 
 class CompletePurchaseView(LoginRequiredMixin, View):
     def get(self, request):
