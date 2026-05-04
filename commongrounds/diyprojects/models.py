@@ -1,4 +1,5 @@
 from django.db import models
+from accounts.models import Profile
 
 
 class ProjectCategory(models.Model):
@@ -20,6 +21,12 @@ class Project(models.Model):
         null=True,
         blank=True,
     )
+    creator = models.ForeignKey(
+    Profile,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    )
     description = models.TextField()
     materials = models.TextField()
     steps = models.TextField()
@@ -27,8 +34,62 @@ class Project(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['created_on']
-        verbose_name_plural = 'Project categories'
+        ordering = ['-created_on']
+
 
     def __str__(self):
         return self.title
+    
+
+class Favorite(models.Model):
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+    )
+    profile = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+    )
+    date_favorited = models.DateField(auto_now_add=True)
+    project_status = models.CharField(
+        max_length = 10,
+        choices=[
+            ('Backlog', 'Backlog'),
+            ('To-Do', 'To-Do'),
+            ('Done', 'Done'),
+        ],
+    )
+
+    def __str__(self):
+        return f"{self.profile} - {self.project}"
+    
+
+class ProjectReview(models.Model):
+    reviewer = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+    )
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+    )
+    comment = models.TextField()
+    image = models.ImageField()
+
+    def __str__(self):
+        return f"{self.reviewer} - {self.project}"
+    
+
+class ProjectRating(models.Model):
+    profile = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+    )
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+    )
+    score = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.profile} - {self.project} - {self.score}"

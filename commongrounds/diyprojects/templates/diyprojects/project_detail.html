@@ -1,16 +1,56 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ project.title }}</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}{{ project.title }}{% endblock %}
+
+{% block content %}
     <h1>{{ project.title }}</h1>
     <p><strong>Category:</strong> {{ project.category }}</p>
+    <p><strong>Creator:</strong> {{ project.creator }}</p>
     <p><strong>Description:</strong> {{ project.description }}</p>
     <p><strong>Materials:</strong> {{ project.materials }}</p>
     <p><strong>Steps:</strong> {{ project.steps }}</p>
     <p><strong>Created On:</strong> {{ project.created_on }}</p>
     <p><strong>Updated On:</strong> {{ project.updated_on }}</p>
-    <a href="/diyprojects/projects">Back to Projects</a>
-</body>
-</html>
+
+    <p><strong>Average Rating:</strong> {{ avg_rating|default:"No ratings yet" }}</p>
+    <p><strong>Favorites:</strong> {{ favorites_count }}</p>
+
+    {% if request.user.is_authenticated %}
+        {% if request.user.profile == project.creator %}
+            <a href="{% url 'diyprojects:project_update' pk=project.pk %}">Edit Project</a>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" name="favorite_submit">
+                {% if user_favorite %}Unfavorite{% else %}Favorite{% endif %}
+            </button>
+        </form>
+
+        <h2>Rate this Project</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ rating_form.as_p }}
+            <button type="submit" name="rating_submit">Submit Rating</button>
+        </form>
+
+        <h2>Leave a Review</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ review_form.as_p }}
+            <button type="submit" name="review_submit">Submit Review</button>
+        </form>
+    {% endif %}
+
+    <h2>Reviews</h2>
+    {% for review in reviews %}
+        <p><strong>{{ review.reviewer }}</strong>: {{ review.comment }}</p>
+        {% if review.image %}
+            <img src="{{ review.image.url }}" alt="Review image" width="200">
+        {% endif %}
+    {% empty %}
+        <p>No reviews yet.</p>
+    {% endfor %}
+
+    <a href="{% url 'diyprojects:project_list' %}">Back to Projects</a>
+{% endblock %}
