@@ -3,17 +3,19 @@ from django.contrib.auth.decorators import login_required
 from django.db import models
 from .models import Project, Favorite
 from .forms import ProjectForm, ProjectReviewForm, ProjectRatingForm
+from .repositories import ProjectRepository
 
 
 def project_list(request):
-    projects = Project.objects.all()
+    repo = ProjectRepository()
+    projects = repo.get_all()
     context = {'projects': projects}
 
     if request.user.is_authenticated:
         profile = request.user.profile
-        created = Project.objects.filter(creator=profile)
-        favorited = Project.objects.filter(favorite__profile=profile)
-        reviewed = Project.objects.filter(projectreview__reviewer=profile)
+        created = projects.filter(creator=profile)
+        favorited = projects.filter(favorite__profile=profile)
+        reviewed = projects.filter(projectreview__reviewer=profile)
         all_grouped = created | favorited | reviewed
         remaining = projects.exclude(pk__in=all_grouped.values('pk'))
         context['created'] = created
@@ -25,12 +27,13 @@ def project_list(request):
 
 
 def project_detail(request, pk):
-    project = get_object_or_404(Project, pk=pk)
+    repo = ProjectRepository()
+    project = repo.get_by_id(pk)
     reviews = project.projectreview_set.all()
     ratings = project.projectrating_set.all()
     avg_rating = ratings.aggregate(models.Avg('score'))['score__avg']
     favorites_count = project.favorite_set.count()
-    
+
     review_form = None
     rating_form = None
     user_favorite = None
@@ -95,7 +98,8 @@ def project_create(request):
 
 @login_required
 def project_update(request, pk):
-    project = get_object_or_404(Project, pk=pk)
+    repo = ProjectRepository()
+    project = repo.get_by_id(pk)
     if request.method == 'POST':
         form = ProjectForm(request.POST, instance=project)
         if form.is_valid():
