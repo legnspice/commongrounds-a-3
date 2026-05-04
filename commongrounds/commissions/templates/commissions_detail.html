@@ -29,12 +29,15 @@
                 {% elif entry.is_full %}
                     <button disabled style="display:inline">Full</button>
                 {% else %}
-                    <button href="" style="display:inline">Apply to Job</button>
+                    <form method="POST" action="{% url 'commissions:jobapply' entry.job.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" style="display:inline">Apply to Job</button>
+                    </form>
                 {% endif %}
             </div>
         {% endfor %}
 
-        <a href="{% url 'commissions:commissionlist'%}">Back</a>
+        <a href="{% url 'commissions:commissionlist' %}">Back</a>
         {% if is_owner %}
             <a href="{% url 'commissions:commissionupdate' commission.pk %}">Edit Commission</a>
         {% endif %}
