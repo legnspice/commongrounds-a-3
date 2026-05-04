@@ -60,6 +60,7 @@ def CommissionDetailView(request, pk):
 
     return render(request, "commissions_detail.html", context)
 
+@role_required('Commission Maker')
 def CommissionCreateView(request):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -91,6 +92,7 @@ def CommissionCreateView(request):
     }
     return render(request, "commissions_form.html", context)
 
+@role_required('Commission Maker')
 def CommissionUpdateView(request, pk):
     if not request.user.is_authenticated:
         return redirect('login')
