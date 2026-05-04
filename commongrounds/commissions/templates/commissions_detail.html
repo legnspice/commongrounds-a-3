@@ -34,7 +34,7 @@
             </div>
         {% endfor %}
 
-        <a href=""{% url 'commissions:commissionlist'%}"">Back</a>
+        <a href="{% url 'commissions:commissionlist'%}">Back</a>
         {% if is_owner %}
             <a href="{% url 'commissions:commissionupdate' commission.pk %}">Edit Commission</a>
         {% endif %}

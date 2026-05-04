@@ -14,6 +14,6 @@ JobFormSet = inlineformset_factory(
     Commission,         
     Job,                
     fields=['role', 'manpower_required', 'status'],
-    extra=1,            
+    extra=5,            
     can_delete=True     
 )

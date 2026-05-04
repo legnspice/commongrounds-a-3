@@ -19,6 +19,8 @@ class Commission(models.Model):
     STATUS_CHOICES = [
         ("open", "Open"),
         ("full", "Full"),
+        ("completed", "Completed"),       
+        ("discontinued", "Discontinued"), 
     ]
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -38,7 +40,7 @@ class Commission(models.Model):
         null = True
     )
     status = models.CharField(
-        max_length = 10,
+        max_length = 20,
         choices = STATUS_CHOICES,
         default = "open"
     )
@@ -66,7 +68,7 @@ class Job(models.Model):
     role = models.CharField(max_length=255)
     manpower_required = models.PositiveIntegerField()
     status = models.CharField(
-        max_length = 10,
+        max_length = 20,
         choices = STATUS_CHOICES,
         default = "open"
     )
@@ -102,7 +104,7 @@ class JobApplication(models.Model):
         related_name = "jobapplications_profile"
     )
     status = models.CharField(
-        max_length = 10,
+        max_length = 20,
         choices = STATUS_CHOICES,
         default = "pending"
     )

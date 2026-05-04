@@ -3,6 +3,7 @@ from accounts.decorators import role_required
 from .forms import CommissionForm, JobFormSet
 from .models import Commission
 from django.db.models import Case, Value, When, IntegerField, Q
+from .services import CommissionService
 
 def CommissionListView(request):
     status_order = Case(
@@ -38,34 +39,23 @@ def CommissionListView(request):
 def CommissionDetailView(request, pk):
     context = {}
     commission = Commission.objects.get(pk=pk)
-    jobs = commission.jobs.all() 
+    summary = CommissionService.get_commission_summary(commission)
 
-    is_owner = request.user.is_authenticated and request.user == commission.maker.user
-    total_manpower = sum(job.manpower_required for job in jobs)
-    accepted_counts = sum(job.jobapplications.filter(status="accepted").count() for job in jobs)
-    open_manpower = total_manpower - accepted_counts
-
-    jobs_with_status = []
-    for job in jobs:
-        job_accepted = job.jobapplications.filter(status="accepted").count()
-        is_full = job_accepted >= job.manpower_required
-        already_applied = (
-            request.user.is_authenticated and
-            job.jobapplications.filter(applicant=request.user.profile).exists()
-        )
-        jobs_with_status.append({
-            'job': job,
-            'job_accepted':job_accepted,
-            'is_full': is_full,
-            'already_applied': already_applied,
-        })
-
+    if request.user.is_authenticated:
+        for entry in summary['jobs_with_status']:
+            entry['already_applied'] = entry['job'].jobapplications.filter(
+                applicant=request.user.profile
+            ).exists()
+    else:
+        for entry in summary['jobs_with_status']:
+            entry['already_applied'] = False
+    
     context = {
         "commission": commission,
-        "is_owner": is_owner,
-        "total_manpower": total_manpower,
-        "open_manpower": open_manpower,
-        "jobs_with_status": jobs_with_status
+        "is_owner": request.user.is_authenticated and request.user == commission.maker.user,
+        "total_manpower": summary['total_manpower'],
+        "open_manpower": summary['open_manpower'],
+        "jobs_with_status": summary['jobs_with_status'],
     }
 
     return render(request, "commissions_detail.html", context)
@@ -78,11 +68,17 @@ def CommissionCreateView(request):
         form = CommissionForm(request.POST)
         formset = JobFormSet(request.POST)
         if form.is_valid() and formset.is_valid():
-            commission = form.save(commit=False)
-            commission.maker = request.user.profile
-            commission.save()
-            formset.instance = commission 
-            formset.save()
+            data = form.cleaned_data
+            jobs_data = [
+                job_form.cleaned_data
+                for job_form in formset
+                if job_form.cleaned_data and not job_form.cleaned_data.get('DELETE')
+            ]
+            commission = CommissionService.create_commission(
+                author=request.user.profile,
+                data=data,
+                jobs_data=jobs_data
+            )
             return redirect(commission)
     else:
         form = CommissionForm()
@@ -100,6 +96,7 @@ def CommissionUpdateView(request, pk):
         return redirect('login')
 
     commission = Commission.objects.get(pk=pk)
+    
 
     if request.method == 'POST':
         form = CommissionForm(request.POST, instance=commission)
@@ -111,6 +108,7 @@ def CommissionUpdateView(request, pk):
                 commission.status = "full"
             commission.save()
             formset.save()
+            CommissionService.get_commission_summary(commission)
             return redirect(commission)
     else:
         form = CommissionForm(instance=commission)
