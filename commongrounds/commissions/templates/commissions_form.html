@@ -1,0 +1,18 @@
+{% extends 'base.html' %} 
+{% block content %}
+    <h2>{{ heading }}</h2>
+    <form method="POST">
+        {% csrf_token%}
+        <h2>Commission Details</h2>
+        {{ form.as_p }}
+
+        <h2>Jobs</h2>
+        {{ formset.management_form }}
+        {% for job_form in formset %}
+            <div>
+                {{ job_form.as_p }}
+            </div>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}

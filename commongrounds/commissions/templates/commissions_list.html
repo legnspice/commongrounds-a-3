@@ -1,8 +1,35 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for Commission in object_list %}
-        <a href='{{Commission.get_absolute_url}}'>Commission {{Commission.id}}</a>
+
+    <a href={% url 'commissions:commissioncreate'%}>Post a Commission</a>
+
+    {% if user.is_authenticated %}
+
+        <h2>My Commissions</h2>
+        {% for commission in user_commissions %}
+            <a href="{{ commission.get_absolute_url }}">{{ commission.title }}</a>
+            <br>
+        {% empty %}
+            <p>You haven't posted any commissions.</p>
+        {% endfor %}
+
+        <h2>Applied Commissions</h2>
+        {% for commission in applied_commissions %}
+            <a href="{{ commission.get_absolute_url }}">{{ commission.title }}</a>
+            <br>
+        {% empty %}
+            <p>You haven't applied to any commissions.</p>
+        {% endfor %}
+
+    {% endif %}
+
+    <h2>All Commissions</h2>
+    {% for commission in all_commissions %}
+        <a href="{{ commission.get_absolute_url }}">{{ commission.title }}</a>
         <br>
+    {% empty %}
+        <p>No commissions available.</p>
     {% endfor %}
+
 {% endblock %}

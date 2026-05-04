@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Apply for {{ job.role }}</h1>
+    <p>Commission: {{ job.commission.title }}</p>
+
+    {% if error %}
+        <p>{{ error }}</p>
+    {% else %}
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit">Confirm Application</button>
+        </form>
+    {% endif %}
+
+    <a href="{{ job.commission.get_absolute_url }}">Back</a>
+{% endblock %}

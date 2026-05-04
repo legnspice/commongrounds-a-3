@@ -1,17 +1,44 @@
 {% extends 'base.html' %}
 
 {% block content %}
-        <p>Commission {{object.id}}</p>
+        <p>Commission {{commission.id}}</p>
         <ul>
             <li>
-                <h1>{{object.title}}</h1>
-                <h3>{{object.commission_type}}</h3>
-                <p>{{object.description}}</p>
-                <p>People required: {{object.people_required}}</p>
-                <p>Created on: {{object.created_on}}</p>
-                <p>Updated on: {{object.updated_on}}</p>
+                <h1>{{commission.title}}</h1>
+                <h3>{{commission.commission_type}}</h3>
+                <p>{{commission.description}}</p>
+                <p>People required: {{commission.people_required}}</p>
+                <p style="display:inline">Job/s:</p>
+                {% for job in commission.jobs.all %}
+                    <p style="display:inline">{{ job }} </p>
+                {% endfor %}
+                <p> Total manpower: {{total_manpower}}</p>
+                <p> Open manpower: {{open_manpower}}</p>
+                <p>Created on: {{commission.created_on}}</p>
+                <p>Updated on: {{commission.updated_on}}</p>
 
             </li>
         </ul>
-        <a href='/commissions/requests'>Back</a>
+
+        {% for entry in jobs_with_status %}
+            <div>
+                <p style="display:inline">{{ entry.job.role }} {{entry.job_accepted}}/{{ entry.job.manpower_required }}</p>
+
+                {% if entry.already_applied %}
+                    <button disabled style="display:inline">Already Applied</button>
+                {% elif entry.is_full %}
+                    <button disabled style="display:inline">Full</button>
+                {% else %}
+                    <form method="POST" action="{% url 'commissions:jobapply' entry.job.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" style="display:inline">Apply to Job</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <a href="{% url 'commissions:commissionlist' %}">Back</a>
+        {% if is_owner %}
+            <a href="{% url 'commissions:commissionupdate' commission.pk %}">Edit Commission</a>
+        {% endif %}
 {% endblock %}
