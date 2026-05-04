@@ -3,7 +3,7 @@
 <h2>Book List</h2>
 
 {% if user.is_authenticated %}
-  {# <p><a href="{% url 'bookclub:book_create' %}">+ Add a New Book</a></p> #}
+  <p><a href="{% url 'bookclub:book_create' %}">+ Add a New Book</a></p>
 
   {% if contributed_books %}
     <h3>Books you have contributed to:</h3>
