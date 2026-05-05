@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth.decorators import login_required
+from accounts.decorators import role_required
 from django.db import models
 from .models import Project, Favorite
 from .forms import ProjectForm, ProjectReviewForm, ProjectRatingForm
@@ -82,7 +82,7 @@ def project_detail(request, pk):
     return render(request, 'diyprojects/project_detail.html', context)
 
 
-@login_required
+@role_required("Project Creator")
 def project_create(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST)
@@ -96,7 +96,7 @@ def project_create(request):
     return render(request, 'diyprojects/project_create.html', {'form': form})
 
 
-@login_required
+@role_required("Project Creator")
 def project_update(request, pk):
     repo = ProjectRepository()
     project = repo.get_by_id(pk)
