@@ -1,51 +1,105 @@
 {% extends 'base.html' %} 
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/book_list.css' %}">
+{% endblock %}
+
 {% block content %}
-<h2>Book List</h2>
 
-{% if user.is_authenticated %}
-  <p><a href="{% url 'bookclub:book_create' %}">+ Add a New Book</a></p>
+<div class="books-page">
+  <div class="list-box">
+    {% if user.is_authenticated %}
 
-  {% if contributed_books %}
-    <h3>Books you have contributed to:</h3>
-    <ul>
-      {% for book in contributed_books %}
-        <li>
-          <a href="{{book.get_absolute_url}}">{{book.title}}</a> by {{book.author}}
-        </li>
+      <div class="user-sections">
+
+        <div class="section-box">
+          <h3>Contributed</h3>
+          <ul class="book-list">
+            {% for book in contributed_books %}
+            <li>
+              <a href="{{book.get_absolute_url}}" class="book-card">
+                <div class="book-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1bd96a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+                <div>
+                  <p class="book-title">{{ book.title }}</p>
+                  <p class="book-author">{{ book.author }}</p>
+                </div>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="section-box">
+          <h3>Bookmarked</h3>
+          <ul class="book-list">
+            {% for book in bookmarked_books %}
+            <li>
+              <a href="{{book.get_absolute_url}}" class="book-card">
+                <div class="book-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1bd96a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+                <div>
+                  <p class="book-title">{{ book.title }}</p>
+                  <p class="book-author">{{ book.author }}</p>
+                </div>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="section-box">
+          <h3>Reviewed</h3>
+          <ul class="book-list">
+            {% for book in reviewed_books %}
+            <li>
+              <a href="{{book.get_absolute_url}}" class="book-card">
+                <div class="book-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1bd96a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+                <div>
+                  <p class="book-title">{{ book.title }}</p>
+                  <p class="book-author">{{ book.author }}</p>
+                </div>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+    </div>
+
+      <h3>All other books:</h3>
+    {% else %}
+    <h2>All Books</h2>
+    {% endif %}
+
+
+    <ul class="book-list">
+      {% for book in all_books %}
+      <li>
+        <a href="{{book.get_absolute_url}}" class="book-card">
+          <div class="book-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#1bd96a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+              </svg>
+          </div>
+          <div>
+            <p class="book-title">{{ book.title }}</p>
+            <p class="book-author">{{ book.author }}</p>
+          </div>
+        </a> 
+      </li>
       {% endfor %}
     </ul>
-  {% endif %}
-
-  {% if bookmarked_books %}
-    <h3>Books you have bookmarked:</h3>
-    <ul>
-      {% for book in bookmarked_books %}
-        <li>
-          <a href="{{book.get_absolute_url}}">{{book.title}}</a> by {{book.author}}
-        </li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-
-  {% if reviewed_books %}
-    <h3>Books you have reviewed:</h3>
-    <ul>
-      {% for book in reviewed_books %}
-        <li>
-          <a href="{{book.get_absolute_url}}">{{book.title}}</a> by {{book.author}}
-        </li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-
-  <h3>All other books:</h3>
-{% endif %}
-
-<ul>
-  {% for book in all_books %}
-  <li>
-    <a href="{{book.get_absolute_url}}">{{book.title}}</a> by {{book.author}} 
-  </li>
-  {% endfor %}
-</ul>
+  </div>
+  
+  <div class="books-sidebar">
+    <a href="{% url 'bookclub:book_create' %}" class="add-book-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1bd96a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="36" height="36">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        <path d="M17 13l1.5-1.5a1 1 0 0 1 1.4 1.4L16 17l-2.5.5.5-2.5z" fill="#1bd96a" stroke="#1bd96a" stroke-width="0.5"/>
+      </svg>
+      <span>Add a book</span>
+    </a>
+  </div>
+</div>
 {% endblock %}
