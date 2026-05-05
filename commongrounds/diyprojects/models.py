@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 from accounts.models import Profile
 
 
@@ -89,7 +90,9 @@ class ProjectRating(models.Model):
         Project,
         on_delete=models.CASCADE,
     )
-    score = models.IntegerField()
+    score = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(10)]
+    )
 
     def __str__(self):
         return f"{self.profile} - {self.project} - {self.score}"
