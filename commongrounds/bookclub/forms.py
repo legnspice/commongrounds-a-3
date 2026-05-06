@@ -4,26 +4,26 @@ from .models import Book, BookReview, Borrow
 class BookReviewForm(forms.ModelForm):
     class Meta:
         model = BookReview
-        fields = ['userReviewer', 'title', 'comment', 'anonReviewer']
+        fields = ['user_reviewer', 'title', 'comment', 'anon_reviewer']
     
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
 
         if user and user.is_authenticated:
-            self.fields.pop('anonReviewer')
-            self.fields['userReviewer'].initial = user.profile
-            self.fields['userReviewer'].disabled = True
+            self.fields.pop('anon_reviewer')
+            self.fields['user_reviewer'].initial = user.profile
+            self.fields['user_reviewer'].disabled = True
         else:
-            self.fields.pop('userReviewer')
-            self.fields['anonReviewer'].initial = 'Anonymous'
-            self.fields['anonReviewer'].disabled = True
+            self.fields.pop('user_reviewer')
+            self.fields['anon_reviewer'].initial = 'Anonymous'
+            self.fields['anon_reviewer'].disabled = True
 
 
 class BookContributeForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['title', 'genre', 'author', 'synopsis', 'publicationYear', 'availableToBorrow' , 'contributor']
+        fields = ['title', 'genre', 'author', 'synopsis', 'publication_year', 'available_to_borrow' , 'contributor']
     
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -36,7 +36,7 @@ class BookContributeForm(forms.ModelForm):
 class BookUpdateForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['title', 'genre', 'author', 'synopsis', 'publicationYear', 'availableToBorrow']
+        fields = ['title', 'genre', 'author', 'synopsis', 'publication_year', 'available_to_borrow']
 
 class BookFormFactory:
     @classmethod
@@ -51,12 +51,12 @@ class BookFormFactory:
 class BookBorrowForm(forms.ModelForm):
     class Meta:
         model = Borrow
-        fields = ['name', 'dateBorrowed']
+        fields = ['name', 'date_borrowed']
         labels = {
-            'dateBorrowed': 'Date Borrowed',
+            'date_borrowed': 'Date Borrowed',
         }
         widgets = {
-            'dateBorrowed': forms.DateInput(attrs={'type': 'date'}),
+            'date_borrowed': forms.DateInput(attrs={'type': 'date'}),
         }
     
     def __init__(self, *args, **kwargs):
