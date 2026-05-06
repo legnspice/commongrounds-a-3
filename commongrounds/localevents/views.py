@@ -2,9 +2,11 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
-from django.views.generic import DetailView, ListView, View
+from django.views import View
+from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
+from accounts.mixins import RoleRequiredMixin
 from .forms import EventForm
 from .models import Event, EventSignup
 
@@ -52,17 +54,12 @@ class EventDetailView(DetailView):
         return context
 
 
-class EventCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class EventCreateView(RoleRequiredMixin, CreateView):
     """Allows Event Organizers to create new events."""
     model = Event
     form_class = EventForm
     template_name = 'localevents/event_form.html'
-    success_url = reverse_lazy('localevents:event_list')
-
-    def test_func(self):
-        if self.request.user.is_authenticated and hasattr(self.request.user, 'profile'):
-            return self.request.user.profile.has_role('Event Organizer')
-        return False
+    required_role = 'Event Organizer'
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -138,22 +135,15 @@ class EventSignupView(BaseSignupView):
                 EventSignup.objects.create(new_registrant=guest_name, event=event)
 
 
-class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class EventUpdateView(RoleRequiredMixin, UpdateView):
     """Allows the organizing Profile to update their event."""
     model = Event
     form_class = EventForm
     template_name = 'localevents/event_form.html'
+    required_role = 'Event Organizer'
     
     def get_success_url(self):
         return reverse_lazy('localevents:event_detail', kwargs={'pk': self.object.pk})
-
-    def test_func(self):
-        event = self.get_object()
-        if self.request.user.is_authenticated and hasattr(self.request.user, 'profile'):
-            profile = self.request.user.profile
-            # Must be an organizer AND own this specific event
-            return profile.has_role('Event Organizer') and profile in event.organizer.all()
-        return False
         
     def form_valid(self, form):
         """Rubric Requirement: Auto-update status based on capacity."""
