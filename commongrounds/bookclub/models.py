@@ -23,10 +23,10 @@ class Book(models.Model):
     )
     author = models.CharField(max_length=255)
     synopsis = models.TextField()
-    publicationYear = models.IntegerField()
-    availableToBorrow = models.BooleanField(default=True)
-    createdOn = models.DateTimeField(auto_now_add=True)
-    updatedOn = models.DateTimeField(auto_now=True)
+    publication_year = models.IntegerField()
+    available_to_borrow = models.BooleanField(default=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
@@ -35,13 +35,13 @@ class Book(models.Model):
         return reverse("bookclub:book_detail", args=[str(self.id)])
 
     class Meta:
-        ordering = ["-publicationYear"]
+        ordering = ["-publication_year"]
 
 class BookReview(models.Model):
-    userReviewer = models.ForeignKey(
+    user_reviewer = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="reviews", null=True, blank=True
     )
-    anonReviewer = models.TextField(blank=True)
+    anon_reviewer = models.TextField(blank=True)
     book = models.ForeignKey(
         Book, on_delete=models.CASCADE, related_name="reviews"
     )
@@ -58,7 +58,7 @@ class Bookmark(models.Model):
     book = models.ForeignKey(
         Book, on_delete=models.CASCADE, related_name="bookmarks"
     )
-    dateBookmarked = models.DateField(auto_now_add=True)
+    date_bookmarked = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.profile} bookmarked {self.book}"
@@ -71,8 +71,8 @@ class Borrow(models.Model):
         Profile, on_delete=models.CASCADE, related_name="books_borrowed", null=True, blank=True
     )
     name = models.CharField(max_length=255, blank=True)
-    dateBorrowed = models.DateField()
-    dateToReturn = models.DateField()
+    date_borrowed = models.DateField()
+    date_to_return = models.DateField()
     
     def __str__(self):
         return f"{self.book} borrowed by {self.borrower or self.name}"

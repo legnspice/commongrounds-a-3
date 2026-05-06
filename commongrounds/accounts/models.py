@@ -17,11 +17,6 @@ class Role(models.Model):
 
 
 class Profile(models.Model):
-    roleChoices = [
-        ("Reader", "Reader"), #REMOVE THIS LATER!!! (value - 4 database, label 4 frontend ?? )
-        ("Book Contributor", "Book Contributor")
-    ]
-
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     displayName = models.CharField(max_length=63)
     emailAddress = models.EmailField()

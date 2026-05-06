@@ -17,12 +17,12 @@ def book_list(request):
 
         contributed_books = Book.objects.filter(contributor=profile)
         bookmarked_books = Book.objects.filter(bookmarks__profile=profile)
-        reviewed_books = Book.objects.filter(reviews__userReviewer=profile).distinct()
+        reviewed_books = Book.objects.filter(reviews__user_reviewer=profile).distinct()
 
         all_books =  Book.objects.exclude(
             Q(contributor=profile)
             |Q(bookmarks__profile=profile)
-            |Q(reviews__userReviewer=profile)
+            |Q(reviews__user_reviewer=profile)
         ).distinct()
 
         context = {
@@ -40,22 +40,22 @@ def book_list(request):
 def book_detail(request, pk):
     book = Book.objects.get(pk=pk)
 
-    reviewForm = BookFormFactory.get_form('review')
+    review_form = BookFormFactory.get_form('review')
 
     if request.method == 'POST':
-        form = reviewForm(request.POST, user=request.user)
+        form = review_form(request.POST, user=request.user)
         if form.is_valid():
             review = form.save(commit=False)
             review.book = book   
             review.save()
             return redirect('bookclub:book_detail', pk=book.pk)
     else:
-        form = reviewForm(user=request.user)
+        form = review_form(user=request.user)
 
-    bookmarkCount = book.bookmarks.count()
+    bookmark_count = book.bookmarks.count()
     context = {
         'book': book,
-        'bookmarkCount': bookmarkCount,
+        'bookmark_count': bookmark_count,
         'form': form
     }
     return render(request, 'book_detail.html', context)
@@ -68,15 +68,15 @@ def bookmark_book(request, pk):
 
 @role_required('Book Contributor')
 def book_add(request):
-    bookForm = BookFormFactory.get_form('contribute')
+    book_form = BookFormFactory.get_form('contribute')
 
     if request.method == 'POST':
-        form = bookForm(request.POST,  user=request.user)
+        form = book_form(request.POST,  user=request.user)
         if form.is_valid():
             book = form.save()
             return redirect(book)
     else:
-        form = bookForm(user=request.user)
+        form = book_form(user=request.user)
 
     context = {
         'form': form,
@@ -88,16 +88,16 @@ def book_add(request):
 @role_required('Book Contributor')
 def book_update(request, pk):
     book = Book.objects.get(pk=pk)  
-    bookForm = BookFormFactory.get_form('update')
+    book_form = BookFormFactory.get_form('update')
 
     if request.method == 'POST':
-        form = bookForm(request.POST, instance=book)
+        form = book_form(request.POST, instance=book)
         if form.is_valid():
             book = form.save(commit=False)
             book.save()
             return redirect(book)
     else:
-        form = bookForm(instance=book)
+        form = book_form(instance=book)
 
     context = {
         'form': form,
@@ -118,7 +118,7 @@ def book_borrow(request, pk):
             if request.user.is_authenticated:
                 borrow.borrower = request.user.profile
             
-            borrow.dateToReturn = borrow.dateBorrowed + timedelta(days=14)
+            borrow.date_to_return = borrow.date_borrowed + timedelta(days=14)
 
             borrow.save()
             return redirect(book)  

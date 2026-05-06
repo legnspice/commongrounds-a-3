@@ -25,16 +25,16 @@
 
   <div class="detail-info-panel list-box">
     <div class="info-row"><span class="info-label">Genre</span><span class="info-value">{{ book.genre }}</span></div>
-    <div class="info-row"><span class="info-label">Published</span><span class="info-value">{{ book.publicationYear }}</span></div>
-    <div class="info-row"><span class="info-label">Bookmarks</span><span class="info-value">{{ bookmarkCount }}</span></div>
-    <div class="info-row"><span class="info-label">Added on</span><span class="info-value">{{ book.createdOn|date:"Y-m-d" }}</span></div>
-    <div class="info-row"><span class="info-label">Updated on</span><span class="info-value">{{ book.updatedOn|date:"Y-m-d" }}</span></div>
+    <div class="info-row"><span class="info-label">Published</span><span class="info-value">{{ book.publication_year }}</span></div>
+    <div class="info-row"><span class="info-label">Bookmarks</span><span class="info-value">{{ bookmark_count }}</span></div>
+    <div class="info-row"><span class="info-label">Added on</span><span class="info-value">{{ book.created_on|date:"Y-m-d" }}</span></div>
+    <div class="info-row"><span class="info-label">Updated on</span><span class="info-value">{{ book.updated_on|date:"Y-m-d" }}</span></div>
     <div class="info-row">
       <span class="info-label">Available to borrow</span>
-      <span class="info-value">{% if book.availableToBorrow %}Yes{% else %}No{% endif %}</span>
+      <span class="info-value">{% if book.available_to_borrow %}Yes{% else %}No{% endif %}</span>
     </div>
 
-    {% if book.availableToBorrow %}
+    {% if book.available_to_borrow %}
     <form method="get" action="{% url 'bookclub:book_borrow' book.pk %}">
       <button type="submit" class="action-btn primary">Borrow this book</button>
     </form>
@@ -52,7 +52,7 @@
           <p class="item-title">
             {% if borrow.borrower %}{{ borrow.borrower.displayName }}{% else %}{{ borrow.name }}{% endif %}
           </p>
-          <p class="item-subtitle">{{ borrow.dateBorrowed|date:"Y-m-d" }} → {{ borrow.dateToReturn|date:"Y-m-d" }}</p>
+          <p class="item-subtitle">{{ borrow.date_borrowed|date:"Y-m-d" }} → {{ borrow.date_to_return|date:"Y-m-d" }}</p>
         </li>
         {% empty %}
         <p class="empty-msg">Not borrowed yet</p>
@@ -73,7 +73,7 @@
       {% for review in book.reviews.all %}
       <div class="detail-card">
         <span class="detail-card-meta">
-          {% if review.userReviewer %}{{ review.userReviewer.displayName }}{% else %}{{ review.anonReviewer }}{% endif %}
+          {% if review.user_reviewer %}{{ review.user_reviewer.displayName }}{% else %}{{ review.anon_reviewer }}{% endif %}
         </span>
         <p class="detail-card-title">{{ review.title }}</p>
         <p class="detail-card-body">{{ review.comment }}</p>
