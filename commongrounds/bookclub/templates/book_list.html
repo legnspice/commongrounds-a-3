@@ -1,105 +1,135 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 {% load static %}
 
-{% block style %}
-    <link rel="stylesheet" href="{% static 'css/book_list.css' %}">
-{% endblock %}
 {% block body_class %}theme-bookclub{% endblock %}
+
 {% block content %}
+<div class="list-page">
 
-<div class="books-page">
-  <div class="list-box">
+  <div class="list-main">
+
     {% if user.is_authenticated %}
+    <div class="user-sections">
 
-      <div class="user-sections">
+      <div class="section-box">
+        <h3>Contributed</h3>
+        <ul class="item-list">
+          {% for book in contributed_books %}
+          <li>
+            <a href="{{ book.get_absolute_url }}" class="item-card">
+              <div class="item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="item-title">{{ book.title }}</p>
+                <p class="item-subtitle">{{ book.author }}</p>
+              </div>
+            </a>
+          </li>
+          {% empty %}
+          <p class="empty-msg">None yet</p>
+          {% endfor %}
+        </ul>
+      </div>
 
-        <div class="section-box">
-          <h3>Contributed</h3>
-          <ul class="book-list">
-            {% for book in contributed_books %}
-            <li>
-              <a href="{{book.get_absolute_url}}" class="book-card">
-                <div class="book-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1bd96a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
-                <div>
-                  <p class="book-title">{{ book.title }}</p>
-                  <p class="book-author">{{ book.author }}</p>
-                </div>
-              </a>
-            </li>
-            {% endfor %}
-          </ul>
-        </div>
+      <div class="section-box">
+        <h3>Bookmarked</h3>
+        <ul class="item-list">
+          {% for book in bookmarked_books %}
+          <li>
+            <a href="{{ book.get_absolute_url }}" class="item-card">
+              <div class="item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="item-title">{{ book.title }}</p>
+                <p class="item-subtitle">{{ book.author }}</p>
+              </div>
+            </a>
+          </li>
+          {% empty %}
+          <p class="empty-msg">None yet</p>
+          {% endfor %}
+        </ul>
+      </div>
 
-        <div class="section-box">
-          <h3>Bookmarked</h3>
-          <ul class="book-list">
-            {% for book in bookmarked_books %}
-            <li>
-              <a href="{{book.get_absolute_url}}" class="book-card">
-                <div class="book-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1bd96a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
-                <div>
-                  <p class="book-title">{{ book.title }}</p>
-                  <p class="book-author">{{ book.author }}</p>
-                </div>
-              </a>
-            </li>
-            {% endfor %}
-          </ul>
-        </div>
+      <div class="section-box">
+        <h3>Reviewed</h3>
+        <ul class="item-list">
+          {% for book in reviewed_books %}
+          <li>
+            <a href="{{ book.get_absolute_url }}" class="item-card">
+              <div class="item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="item-title">{{ book.title }}</p>
+                <p class="item-subtitle">{{ book.author }}</p>
+              </div>
+            </a>
+          </li>
+          {% empty %}
+          <p class="empty-msg">None yet</p>
+          {% endfor %}
+        </ul>
+      </div>
 
-        <div class="section-box">
-          <h3>Reviewed</h3>
-          <ul class="book-list">
-            {% for book in reviewed_books %}
-            <li>
-              <a href="{{book.get_absolute_url}}" class="book-card">
-                <div class="book-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1bd96a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
-                <div>
-                  <p class="book-title">{{ book.title }}</p>
-                  <p class="book-author">{{ book.author }}</p>
-                </div>
-              </a>
-            </li>
-            {% endfor %}
-          </ul>
-        </div>
     </div>
-
-      <h3>All other books:</h3>
-    {% else %}
-    <h2>All Books</h2>
     {% endif %}
 
+    <div class="list-box">
+      {% if user.is_authenticated %}
+      <h2>All other books</h2>
+      {% else %}
+      <h2>All Books</h2>
+      {% endif %}
 
-    <ul class="book-list">
-      {% for book in all_books %}
-      <li>
-        <a href="{{book.get_absolute_url}}" class="book-card">
-          <div class="book-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#1bd96a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <ul class="item-list">
+        {% for book in all_books %}
+        <li>
+          <a href="{{ book.get_absolute_url }}" class="item-card">
+            <div class="item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
               </svg>
-          </div>
-          <div>
-            <p class="book-title">{{ book.title }}</p>
-            <p class="book-author">{{ book.author }}</p>
-          </div>
-        </a> 
-      </li>
-      {% endfor %}
-    </ul>
+            </div>
+            <div>
+              <p class="item-title">{{ book.title }}</p>
+              <p class="item-subtitle">{{ book.author }}</p>
+            </div>
+          </a>
+        </li>
+        {% empty %}
+        <p class="empty-msg">No books yet</p>
+        {% endfor %}
+      </ul>
+    </div>
+
   </div>
-  
-  <div class="books-sidebar">
-    <a href="{% url 'bookclub:book_create' %}" class="add-book-btn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#1bd96a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="36" height="36">
+
+  {% if user.is_authenticated %}
+  <div class="list-sidebar">
+    <a href="{% url 'bookclub:book_create' %}" class="sidebar-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
         <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-        <path d="M17 13l1.5-1.5a1 1 0 0 1 1.4 1.4L16 17l-2.5.5.5-2.5z" fill="#1bd96a" stroke="#1bd96a" stroke-width="0.5"/>
+        <line x1="16" y1="7" x2="16" y2="13"/>
+        <line x1="13" y1="10" x2="19" y2="10"/>
       </svg>
       <span>Add a book</span>
     </a>
   </div>
+  {% endif %}
+
 </div>
 {% endblock %}

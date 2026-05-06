@@ -74,6 +74,21 @@ body.theme-merchstore {
     --border-bright: #555588;
 }
 
+body.theme-commissions {
+    --bg: #1a0a08;
+    --bg-raised: #2a1210;
+    --bg-stone: #1f1510;
+    --accent: #ff6a00;
+    --accent-hover: #cc4400;
+    --accent-gold: #ff4400;
+    --accent-brown: #cc3300;
+    --text: #e8c8b0;
+    --text-muted: #8a5a48;
+    --border: #5a2018;
+    --border-bright: #8b3020;
+    --glow: rgba(255, 100, 0, 0.15);
+}
+
 nav {
     background-color: var(--bg-raised);
     border-bottom: 3px solid var(--border-bright);

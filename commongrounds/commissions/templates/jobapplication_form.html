@@ -1,17 +1,53 @@
 {% extends 'base.html' %}
-
+{% block body_class %}theme-commissions{% endblock %}
 {% block content %}
-    <h1>Apply for {{ job.role }}</h1>
-    <p>Commission: {{ job.commission.title }}</p>
+<div class="mc-form-page">
+    <div class="mc-form-container">
 
-    {% if error %}
-        <p>{{ error }}</p>
-    {% else %}
-        <form method="POST">
-            {% csrf_token %}
-            <button type="submit">Confirm Application</button>
-        </form>
-    {% endif %}
+        <h1 class="mc-form-title">Apply for {{ job.role }}</h1>
 
-    <a href="{{ job.commission.get_absolute_url }}">Back</a>
+        <div class="mc-form-body">
+            <div class="mc-item-slot-panel">
+                <div class="mc-item-slot">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                        <path d="M12 7V5a2 2 0 0 0-2-2H8"/>
+                    </svg>
+                </div>
+                <div class="mc-item-info">
+                    <p><strong>Commission</strong></p>
+                    <p>{{ job.commission.title }}</p>
+                    <p><strong>Role</strong></p>
+                    <p>{{ job.role }}</p>
+                    <p><strong>Slots</strong></p>
+                    <p>{{ job.manpower_required }}</p>
+                </div>
+            </div>
+
+            <div class="mc-enchant-panel">
+                {% if error %}
+                    <div class="mc-enchant-row">
+                        <p style="color: var(--accent);">{{ error }}</p>
+                    </div>
+                {% else %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mc-enchant-row">
+                            <p style="font-size: 8px; color: var(--text-muted);">
+                                You are applying for the role of 
+                                <strong style="color: var(--text);">{{ job.role }}</strong> 
+                                in <strong style="color: var(--text);">{{ job.commission.title }}</strong>.
+                                Your application will be pending until the commission maker reviews it.
+                            </p>
+                        </div>
+                        <button type="submit" class="mc-submit-btn">Confirm Application</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <a href="{{ job.commission.get_absolute_url }}" class="back-link">← Back to Commission</a>
+
+    </div>
+</div>
 {% endblock %}

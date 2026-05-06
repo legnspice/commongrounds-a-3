@@ -1,18 +1,56 @@
-{% extends 'base.html' %} 
-{% block content %}
-    <h2>{{ heading }}</h2>
-    <form method="POST">
-        {% csrf_token%}
-        <h2>Commission Details</h2>
-        {{ form.as_p }}
+{% extends 'base.html' %}
+{% load static %}
 
-        <h2>Jobs</h2>
-        {{ formset.management_form }}
-        {% for job_form in formset %}
-            <div>
-                {{ job_form.as_p }}
+{% block body_class %}theme-commissions{% endblock %}
+
+{% block content %}
+<div class="mc-form-page">
+  <div class="mc-form-container">
+    <p class="mc-form-title">{{ heading }}</p>
+
+    <form method="POST">
+      {% csrf_token %}
+      <div class="mc-form-body">
+\
+        <div class="mc-item-slot-panel">
+          <div class="mc-item-slot">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            </svg>
+          </div>
+
+          <div class="mc-enchant-panel" style="width: 180px;">
+            <p class="mc-form-title">Commission Details</p>
+            {% for field in form %}
+            <div class="mc-enchant-row">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field }}
             </div>
-        {% endfor %}
-        <button type="submit">Submit</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="mc-enchant-panel">
+          <p class="mc-form-title">Jobs</p>
+          {{ formset.management_form }}
+          {% for job_form in formset %}
+          <div style="margin-bottom: 10px;">
+            {% for field in job_form %}
+              {% if not field.is_hidden and field.html_name != 'DELETE' %}
+              <div class="mc-enchant-row">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+              </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          {% endfor %}
+        </div>
+
+      </div>
+
+      <button type="submit" class="mc-submit-btn">Submit</button>
     </form>
+
+  </div>
+</div>
 {% endblock %}

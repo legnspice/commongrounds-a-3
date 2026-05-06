@@ -1,15 +1,16 @@
-:root {
-    --bg: #f0e6cc;
-    --bg-raised: #e8d9b0;
-    --bg-stone: #dcc990;
-    --accent: #6b3d1e;
-    --accent-hover: #4e2a10;
-    --accent-gold: #8b6914;
-    --accent-brown: #7a4a2a;
-    --text: #2e1a08;
-    --text-muted: #7a5a3a;
-    --border: #b08050;
-    --border-bright: #7a4a1e;
+root {
+    --bg: #1a0a08;
+    --bg-raised: #2a1210;
+    --bg-stone: #1f1510;
+    --accent: #ff6a00;
+    --accent-hover: #cc4400;
+    --accent-gold: #ff4400;
+    --accent-brown: #cc3300;
+    --text: #e8c8b0;
+    --text-muted: #8a5a48;
+    --border: #5a2018;
+    --border-bright: #8b3020;
+    --glow: rgba(255, 100, 0, 0.15);
 }
 
 .mc-form-page {
@@ -43,7 +44,6 @@
     align-items: flex-start;
 }
 
-/* LEFT: item slot panel */
 .mc-item-slot-panel {
     display: flex;
     flex-direction: column;
@@ -87,7 +87,6 @@
     font-size: 7px;
 }
 
-/* RIGHT: enchant slots / form */
 .mc-enchant-panel {
     flex: 1;
     display: flex;
