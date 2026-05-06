@@ -1,65 +1,88 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/book_detail.css' %}">
+{% endblock %} 
+{% block body_class %}theme-bookclub{% endblock %}
 {% block content %}
-    <h2><a href="{% url 'bookclub:books' %}">Back to Book List</a></h2>
-    <h3>{{book.title}} by: {{book.author}}</h3>
-    <p>Genre: {{book.genre}}</p>
-    <p>Publication Year: {{book.publicationYear}}</p>
-    
-    <p>Created On: {{book.createdOn|date:"Y-m-d"}}</p>
-    <p>Updated On: {{book.updatedOn|date:"Y-m-d"}}</p>
+<a href="{% url 'bookclub:books' %}" class="back-link">← Back to Book List</a>
 
-    <p>Bookmarks: {{bookmarkCount}} </p>
-    <form method="post" action="{% url 'bookclub:bookmark_book' book.pk %}">
-        {% csrf_token %}
-        <button type="submit">Bookmark this book</button>
-    </form>
+<div class="book-detail-page">
+    <div class="book-header">
+        <div>
+            <h1>{{ book.title }}</h1>
+            <h2>by {{ book.author }}</h2>
+            </div>
+            <form method="post" action="{% url 'bookclub:bookmark_book' book.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="bookmark-btn" title="Bookmark this book">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#1bd96a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                </svg>
+            </button>
+            </form>
+        </div>
 
-    <h3>Reviews</h3>
-    <form method="post">
-        {% csrf_token%}
-        {{ form.as_p }}
-        <button type="submit">Submit Review</button>
-    </form>
+          <div class="book-info-panel">
+            <div class="info-row"><span class="info-label">Genre</span><span class="info-value">{{ book.genre }}</span></div>
+            <div class="info-row"><span class="info-label">Published</span><span class="info-value">{{ book.publicationYear }}</span></div>
+            <div class="info-row"><span class="info-label">Bookmarks</span><span class="info-value">{{ bookmarkCount }}</span></div>
+            <div class="info-row"><span class="info-label">Added on</span><span class="info-value">{{ book.createdOn|date:"Y-m-d" }}</span></div>
+            <div class="info-row"><span class="info-label">Updated on</span><span class="info-value">{{ book.updatedOn|date:"Y-m-d" }}</span></div>
+            <div class="info-row">
+            <span class="info-label">Available to borrow</span>
+            <span class="info-value">{% if book.availableToBorrow %}Yes{% else %}No{% endif %}</span>
+            </div>
 
-    <hr style="color: black;">
-
-    {% for review in book.reviews.all %}
-        <p> {% if review.userReviewer %} {{review.userReviewer.displayName}} {% else %} {{review.anonReviewer}} {% endif %}</p> 
-        <p> <strong> {{review.title}} </strong></p>
-        <p> {{review.comment}} </p>
-    {% empty %}
-        <p>No Reviews Yet!</p>
-    {% endfor %}
-
-    {% if user.is_authenticated and book.contributor == user.profile %}
-        <p><a href="{% url 'bookclub:book_edit' book.pk %}"> Edit this book</a></p>
-    {% endif %}
-
-    <hr style="color: black;">
-    
-    <p>Available to Borrow: {% if book.availableToBorrow %} YES {% else %} NO {% endif %}</p>
-    {% if book.availableToBorrow %}
+        {% if book.availableToBorrow %}
         <form method="get" action="{% url 'bookclub:book_borrow' book.pk %}">
-            <button type="submit">Borrow this book</button>
+        <button type="submit" class="action-btn primary">Borrow this book</button>
         </form>
+        {% endif %}
+
+  
+    {% if user.is_authenticated and book.contributor == user.profile %}
+    <a href="{% url 'bookclub:book_edit' book.pk %}" class="action-btn">Edit this book</a>
     {% endif %}
 
-    <h3>Borrow History</h3>
-    <ul>
+    <div class="borrow-section">
+      <h2>Borrow history</h2>
+      <ul class="borrow-list">
         {% for borrow in book.borrows.all %}
-            <li>
-                Borrowed by 
-                {% if borrow.borrower %}
-                    {{ borrow.borrower.displayName }}
-                {% else %}
-                    {{ borrow.name }}
-                {% endif %}
-                on {{ borrow.dateBorrowed|date:"Y-m-d" }} —
-                return by {{ borrow.dateToReturn|date:"Y-m-d" }}
-            </li>
+        <li>
+          {% if borrow.borrower %}{{ borrow.borrower.displayName }}{% else %}{{ borrow.name }}{% endif %}
+          — {{ borrow.dateBorrowed|date:"Y-m-d" }} to {{ borrow.dateToReturn|date:"Y-m-d" }}
+        </li>
         {% empty %}
-            <li>This book has not been borrowed yet.</li>
+        <li>Not borrowed yet</li>
         {% endfor %}
-    </ul>
+      </ul>
+    </div>
+  </div>
 
+  <div class="reviews-panel">
+    <h2>Reviews</h2>
+    <form method="post" class="review-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="action-btn primary" style="margin-top: 8px;">Submit review</button>
+    </form>
+
+    <div class="reviews-scroll">
+      {% for review in book.reviews.all %}
+      <div class="review-card">
+        <span class="review-author">
+          {% if review.userReviewer %}{{ review.userReviewer.displayName }}{% else %}{{ review.anonReviewer }}{% endif %}
+        </span>
+        <p class="review-title">{{ review.title }}</p>
+        <p class="review-comment">{{ review.comment }}</p>
+      </div>
+      {% empty %}
+      <p style="font-size: 13px; color: var(--text-muted);">No reviews yet</p>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
 {% endblock %}

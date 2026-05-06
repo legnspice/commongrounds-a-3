@@ -1,0 +1,170 @@
+:root {
+    --bg: #f0e6cc;
+    --bg-raised: #e8d9b0;
+    --bg-stone: #dcc990;
+    --accent: #6b3d1e;
+    --accent-hover: #4e2a10;
+    --accent-gold: #8b6914;
+    --accent-brown: #7a4a2a;
+    --text: #2e1a08;
+    --text-muted: #7a5a3a;
+    --border: #b08050;
+    --border-bright: #7a4a1e;
+}
+
+.mc-form-page {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 30px 20px;
+}
+
+.mc-form-container {
+    background-color: var(--bg-raised);
+    border: 3px solid var(--border-bright);
+    outline: 2px solid var(--border);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 50%;
+
+}
+
+.mc-form-title {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.mc-form-body {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+/* LEFT: item slot panel */
+.mc-item-slot-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.mc-item-slot {
+    width: 56px;
+    height: 56px;
+    background-color: var(--bg-stone);
+    border-top: 3px solid var(--border);
+    border-left: 3px solid var(--border);
+    border-bottom: 3px solid var(--bg-raised);
+    border-right: 3px solid var(--bg-raised);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mc-item-slot svg {
+    width: 36px;
+    height: 36px;
+}
+
+.mc-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: 120px;
+}
+
+.mc-item-info p {
+    font-size: 7px;
+    color: var(--text-muted);
+    line-height: 2;
+}
+
+.mc-item-info strong {
+    color: var(--text);
+    font-size: 7px;
+}
+
+/* RIGHT: enchant slots / form */
+.mc-enchant-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.mc-enchant-row {
+    background-color: var(--bg-stone);
+    border-top: 2px solid var(--border);
+    border-left: 2px solid var(--border);
+    border-bottom: 2px solid var(--bg-raised);
+    border-right: 2px solid var(--bg-raised);
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.mc-enchant-row label {
+    font-size: 7px;
+    color: var(--text-muted);
+    display: block;
+}
+
+.mc-enchant-row input,
+.mc-enchant-row textarea,
+.mc-enchant-row select {
+    width: 100%;
+    background-color: var(--bg);
+    border: none;
+    border-bottom: 2px solid var(--border-bright);
+    padding: 6px 4px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: var(--text);
+    outline: none;
+}
+
+.mc-enchant-row input:focus,
+.mc-enchant-row textarea:focus,
+.mc-enchant-row select:focus {
+    border-bottom-color: var(--accent-gold);
+}
+
+.mc-enchant-row textarea {
+    resize: none;
+    height: 60px;
+}
+
+/* paragraph wrapper django renders */
+.mc-enchant-panel p {
+    margin: 0;
+}
+
+.mc-submit-btn {
+    background-color: var(--bg-stone);
+    border-top: 3px solid var(--bg-raised);
+    border-left: 3px solid var(--bg-raised);
+    border-bottom: 3px solid var(--border-bright);
+    border-right: 3px solid var(--border-bright);
+    padding: 10px 20px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: var(--accent-gold);
+    cursor: pointer;
+    align-self: flex-end;
+    transition: filter 0.1s;
+}
+
+.mc-submit-btn:hover {
+    filter: brightness(1.2);
+}
+
+.mc-submit-btn:active {
+    border-top: 3px solid var(--border-bright);
+    border-left: 3px solid var(--border-bright);
+    border-bottom: 3px solid var(--bg-raised);
+    border-right: 3px solid var(--bg-raised);
+}

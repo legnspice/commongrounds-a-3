@@ -1,68 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 :root {
-    --bg: #1a1a27;
-    --bg-raised: #26263a;
-    --nav-bg: #1e1e2e;
-    --accent: #1bd96a;
-    --accent-hover: #17b357;
-    --text: #e0e0e0;
-    --text-muted: #9090a0;
-    --border: #35354a;
+    --bg: #f0e6cc;
+    --bg-raised: #e8d9b0;
+    --bg-stone: #dcc990;
+    --accent: #6b3d1e;
+    --accent-hover: #4e2a10;
+    --accent-gold: #8b6914;
+    --accent-brown: #7a4a2a;
+    --text: #2e1a08;
+    --text-muted: #7a5a3a;
+    --border: #b08050;
+    --border-bright: #7a4a1e;
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    color: var(--text)
+    color: var(--text);
+    font-family: 'Press Start 2P', monospace;
 }
 
 body {
-    font-family: sans-serif;
     background-color: var(--bg);
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 31px,
+            rgba(0,0,0,0.04) 31px,
+            rgba(0,0,0,0.04) 32px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 31px,
+            rgba(0,0,0,0.04) 31px,
+            rgba(0,0,0,0.04) 32px
+        );
+    font-size: 10px;
+    line-height: 1.8;
+}
+body.theme-bookclub {
+    --bg: #f0e6cc;
+    --bg-raised: #e8d9b0;
+    --bg-stone: #dcc990;
+    --accent: #6b3d1e;
+    --accent-gold: #8b6914;
+    --text: #2e1a08;
+    --text-muted: #7a5a3a;
+    --border: #b08050;
+    --border-bright: #7a4a1e;
 }
 
+body.theme-localevents {
+    --bg: #0f1f0f;
+    --bg-raised: #162416;
+    --accent: #4caf50;
+    --text: #c8e6c8;
+    --text-muted: #6a9a6a;
+    --border: #2a4a2a;
+    --border-bright: #3a6a3a;
+}
 
-nav{
-    font-size: 18px;
+body.theme-merchstore {
+    --bg: #1a1a2e;
+    --bg-raised: #22223a;
+    --accent: #e94560;
+    --text: #e0e0f0;
+    --text-muted: #8080a0;
+    --border: #333355;
+    --border-bright: #555588;
+}
+
+nav {
     background-color: var(--bg-raised);
-    display:flex;
+    border-bottom: 3px solid var(--border-bright);
+    display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;
-    vertical-align: middle;
-    padding:30px 30px;
     align-items: center;
+    padding: 20px 30px;
 }
 
 nav strong {
-    margin-right: 5px;
+    color: var(--accent-gold);
+    text-shadow: 1px 1px #c8a030;
+    margin-right: 8px;
 }
 
 nav a {
     text-decoration: none;
-    padding: 12px 24px;
-    border-radius: 4px;
-    transition: background-color 0.2s;
+    padding: 10px 16px;
+    border: 2px solid transparent;
+    font-size: 9px;
+    transition: border-color 0.1s, background-color 0.1s;
 }
 
 nav a:hover {
-    background-color: var(--border);
+    border-color: var(--border-bright);
+    background-color: var(--bg-stone);
 }
 
 .logout-btn {
     display: inline;
     background: none;
-    border: none;
+    border: 2px solid transparent;
     cursor: pointer;
-    font-size: inherit;
-    padding: 12px 24px;
-    border-radius: 4px;
-    transition: background-color 0.2s;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    padding: 10px 16px;
+    transition: border-color 0.1s, background-color 0.1s;
 }
 
 .logout-btn:hover {
-    background-color: var(--border);
+    border-color: var(--border-bright);
+    background-color: var(--bg-stone);
 }
 
-.content-wrapper {
-    padding: 0 20px;
-}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background-color: var(--border); }
