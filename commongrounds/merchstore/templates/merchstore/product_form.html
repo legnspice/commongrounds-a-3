@@ -1,5 +1,8 @@
-{% extends 'merchstore/base_merchstore.html' %} {% block app_content %}
+{% extends 'base.html' %}
+{% load static %}
 
+{% block body_class %}theme-merchstore{% endblock %}
+{% block content %}
 <h1>{% if object %}Edit Product{% else %}Add Product{% endif %}</h1>
 <form method="POST" enctype="multipart/form-data">
   {% csrf_token %}

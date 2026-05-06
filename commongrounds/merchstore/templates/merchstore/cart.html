@@ -1,5 +1,8 @@
-{% extends 'merchstore/base_merchstore.html' %} {% block app_content %}
+{% extends 'base.html' %}
+{% load static %}
 
+{% block body_class %}theme-merchstore{% endblock %}
+{% block content %}
 <h1>My Cart</h1>
 
 {% for owner, transactions in grouped.items %}

@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+{% load static %}
 
+{% block body_class %}theme-localevents{% endblock %}
 {% block content %}
 <div class="event-form">
     <h2>{% if object %}Update Your Event{% else %}Create a New Community Event{% endif %}</h2>

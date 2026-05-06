@@ -55,23 +55,33 @@ body.theme-bookclub {
 }
 
 body.theme-localevents {
-    --bg: #0f1f0f;
-    --bg-raised: #162416;
-    --accent: #4caf50;
-    --text: #c8e6c8;
-    --text-muted: #6a9a6a;
-    --border: #2a4a2a;
-    --border-bright: #3a6a3a;
+    --bg: #0d0a1a;
+    --bg-raised: #1a1528;
+    --bg-stone: #141020;
+    --accent: #9b6cc7;        
+    --accent-gold: #b899d4;   
+    --accent-brown: #6b3fb7; 
+    --text: #c8b8e8;    
+    --text-muted: #7a6a99;
+    --border: #3d2b6b;
+    --border-bright: #6a3aab;
+    --glow: rgba(180, 100, 255, 0.05);
+    --shadow: #4a1a8a;
 }
 
 body.theme-merchstore {
-    --bg: #1a1a2e;
-    --bg-raised: #22223a;
-    --accent: #e94560;
-    --text: #e0e0f0;
-    --text-muted: #8080a0;
-    --border: #333355;
-    --border-bright: #555588;
+    --bg: #020a0c;
+    --bg-raised: #071418;
+    --bg-stone: #050f12;
+    --accent: #2aaa9a;        
+    --accent-gold: #3abfb0;   
+    --accent-brown: #1a7a72;
+    --text: #88b8b8;
+    --text-muted: #2a5a5a;
+    --border: #0a3a3a;
+    --border-bright: #0d6060;
+    --glow: rgba(0, 200, 180, 0.05);
+    --shadow: #003a35;
 }
 
 body.theme-commissions {
@@ -86,7 +96,23 @@ body.theme-commissions {
     --text-muted: #8a5a48;
     --border: #5a2018;
     --border-bright: #8b3020;
-    --glow: rgba(255, 100, 0, 0.15);
+    --glow: rgba(255, 100, 0, 0.05);
+}
+
+body.theme-diyprojects {
+    --bg: #e8f0e0;
+    --bg-raised: #d8e8c8;
+    --bg-stone: #c8dab8;
+    --accent: #3a6e1a;
+    --accent-hover: #2a5210;
+    --accent-gold: #5a8a2a;
+    --accent-brown: #6b4a1e;
+    --text: #1a2e0a;
+    --text-muted: #4a6a3a;
+    --border: #8aaa6a;
+    --border-bright: #4a7a2a;
+    --glow: rgba(60, 120, 30, 0.08);
+    --shadow: #2a5010;
 }
 
 nav {
