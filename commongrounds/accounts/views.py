@@ -57,4 +57,4 @@ def dashboard_2(request):
             "commissions": Commission.objects.filter(maker=profile),
         }
 
-    return render(request, "accounts/dashboard.html", context)
+    return render(request, "accounts/dashboard_alt.html", context)
