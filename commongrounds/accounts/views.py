@@ -31,6 +31,7 @@ def profile_update_view(request, username):
 def permission_denied(request):
     return render(request,'permission_denied.html')
 
+@login_required
 def dashboard(request):
     profile = request.user.profile
 
