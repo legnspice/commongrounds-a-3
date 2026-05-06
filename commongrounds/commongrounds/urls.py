@@ -5,18 +5,13 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from .views import index
+
 urlpatterns = [
-
-    path('', RedirectView.as_view(url='/localevents/events/'), name='index'),
-
-
+    path('', index, name='index'),
     path('admin/', admin.site.urls),
-
-  
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include('accounts.urls')),
-
-
     path('bookclub/', include('bookclub.urls', namespace='bookclub')),
     path('commissions/', include('commissions.urls', namespace='commissions')),
     path('diyprojects/', include('diyprojects.urls', namespace='diyprojects')),

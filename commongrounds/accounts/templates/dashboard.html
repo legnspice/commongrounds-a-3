@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Dashboard</h1>
+<h2>Welcome, {{ user.profile.displayName }}!</h2>
+
+<section>
+    <h3>Products You're Selling ({{ products.count }})</h3>
+    {% if products %}
+        <ul>
+            {% for product in products %}
+                <li><a href="{% url 'merchstore:product_detail' product.id %}">{{ product.name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven't listed any products yet.</p>
+    {% endif %}
+</section>
+
+<section>
+    <h3>Events You've Organized ({{ events.count }})</h3>
+    {% if events %}
+        <ul>
+            {% for event in events %}
+                <li><a href="{% url 'localevents:event_detail' event.id %}">{{ event.title }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven't organized any events yet.</p>
+    {% endif %}
+</section>
+
+<section>
+    <h3>Books You've Contributed ({{ books.count }})</h3>
+    {% if books %}
+        <ul>
+            {% for book in books %}
+                <li><a href="{% url 'bookclub:book_detail' book.id %}">{{ book.title }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven't contributed any books yet.</p>
+    {% endif %}
+</section>
+
+<section>
+    <h3>Projects You've Created ({{ projects.count }})</h3>
+    {% if projects %}
+        <ul>
+            {% for project in projects %}
+                <li><a href="{% url 'diyprojects:project_detail' project.id %}">{{ project.title }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven't created any projects yet.</p>
+    {% endif %}
+</section>
+
+<section>
+    <h3>Commissions You've Created ({{ commissions.count }})</h3>
+    {% if commissions %}
+        <ul>
+            {% for commission in commissions %}
+                <li><a href="{% url 'commissions:commission_detail' commission.id %}">{{ commission.title }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven't created any commissions yet.</p>
+    {% endif %}
+</section>
+{% endblock %}
