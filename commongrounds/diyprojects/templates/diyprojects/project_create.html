@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}theme-diyprojects{% endblock %}
+{% block title %}Create Project{% endblock %}
+
+{% block content %}
+<div class="mc-form-page">
+    <div class="mc-form-container">
+
+        <h1 class="mc-form-title">Create Project</h1>
+
+        <div class="mc-form-body">
+            <div class="mc-item-slot-panel">
+                <div class="mc-item-slot">
+                    <img src="{% static 'img/bundle.png' %}" class="slot-img" alt="" />
+                    <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                </div>
+                <div class="mc-item-info">
+                    <p><strong>New Project</strong></p>
+                    <p>Fill in the details to create your project.</p>
+                </div>
+            </div>
+
+            <div class="mc-enchant-panel">
+                <form method="POST">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mc-enchant-row">
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="mc-submit-btn">Create</button>
+                </form>
+            </div>
+        </div>
+
+        <a href="{% url 'diyprojects:project_list' %}" class="back-link">← Back to Projects</a>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}theme-merchstore{% endblock %}
+
+{% block content %}
+<div class="mc-form-page">
+    <div class="mc-form-container">
+
+        <h1 class="mc-form-title">
+            {% if object %}Edit Product{% else %}Add Product{% endif %}
+        </h1>
+
+        <div class="mc-form-body">
+            <div class="mc-item-slot-panel">
+                <div class="mc-item-slot">
+                    <img src="{% static 'img/trident.png' %}" class="slot-img" alt="" />
+                    <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                </div>
+                <div class="mc-item-info">
+                    <p><strong>{% if object %}Editing{% else %}New Product{% endif %}</strong></p>
+                    <p>{% if object %}{{ object.name }}{% else %}Fill in the details below.{% endif %}</p>
+                </div>
+            </div>
+
+            <div class="mc-enchant-panel">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mc-enchant-row">
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="mc-submit-btn">Save</button>
+                </form>
+            </div>
+        </div>
+
+        <a href="{% url 'merchstore:item_list' %}" class="back-link">← Cancel</a>
+
+    </div>
+</div>
+{% endblock %}

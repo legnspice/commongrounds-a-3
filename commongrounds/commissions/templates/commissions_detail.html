@@ -1,17 +1,71 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}theme-commissions{% endblock %}
 
 {% block content %}
-        <p>Commission {{object.id}}</p>
-        <ul>
-            <li>
-                <h1>{{object.title}}</h1>
-                <h3>{{object.commission_type}}</h3>
-                <p>{{object.description}}</p>
-                <p>People required: {{object.people_required}}</p>
-                <p>Created on: {{object.created_on}}</p>
-                <p>Updated on: {{object.updated_on}}</p>
+<a href="{% url 'commissions:commissionlist' %}" class="back-link">← Back to Commissions</a>
 
-            </li>
-        </ul>
-        <a href='/commissions/requests'>Back</a>
+<div class="detail-page">
+
+  <div class="detail-header">
+    <div>
+      <h1>{{ commission.title }}</h1>
+      <h2>{{ commission.commission_type }}</h2>
+    </div>
+    {% if is_owner %}
+    <a href="{% url 'commissions:commissionupdate' commission.pk %}" class="action-btn">Edit</a>
+    {% endif %}
+  </div>
+
+  <div class="detail-info-panel list-box">
+    <div class="info-row"><span class="info-label">Type</span><span class="info-value">{{ commission.commission_type }}</span></div>
+    <div class="info-row"><span class="info-label">People required</span><span class="info-value">{{ commission.people_required }}</span></div>
+    <div class="info-row"><span class="info-label">Total manpower</span><span class="info-value">{{ total_manpower }}</span></div>
+    <div class="info-row"><span class="info-label">Open manpower</span><span class="info-value">{{ open_manpower }}</span></div>
+    <div class="info-row"><span class="info-label">Created on</span><span class="info-value">{{ commission.created_on|date:"Y-m-d" }}</span></div>
+    <div class="info-row"><span class="info-label">Updated on</span><span class="info-value">{{ commission.updated_on|date:"Y-m-d" }}</span></div>
+    <div class="info-row"><span class="info-label">Maker</span><span class="info-value">{{ commission.maker }}</span></span></div>
+
+    <div class="detail-subsection">
+      <h3>Description</h3>
+      <p class="empty-msg">{{ commission.description }}</p>
+    </div>
+
+    <div class="detail-subsection">
+      <h3>Jobs</h3>
+      <ul class="item-list">
+        {% for job in commission.jobs.all %}
+        <li class="item-card">
+          <p class="item-title">{{ job }}</p>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="detail-side-panel list-box">
+    <h2>Apply for a Role</h2>
+    <div class="detail-scroll">
+      {% for entry in jobs_with_status %}
+      <div class="detail-card">
+        <p class="detail-card-title">{{ entry.job.role }}</p>
+        <p class="detail-card-meta">{{ entry.job_accepted }} / {{ entry.job.manpower_required }} filled</p>
+        <div class="detail-card-body">
+          {% if entry.already_applied %}
+            <button class="action-btn" disabled>Already Applied</button>
+          {% elif entry.is_full %}
+            <button class="action-btn" disabled>Full</button>
+          {% else %}
+            <a href="{% url 'commissions:jobapply' entry.job.pk %}" class="action-btn">Apply Job</a>
+          {% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <p class="empty-msg">No roles listed.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
 {% endblock %}

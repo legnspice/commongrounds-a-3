@@ -1,23 +1,55 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index {% block title%}{% endblock %}</title>
-    <style></style>
+    <title>Common Grounds {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mc_form.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     {% block style %}{% endblock %}
+    
   </head>
-  <body>
-    {% if request.user.is_authenticated %}
-        <p> Hi {{ request.user.profile.displayName }}</p>
-        <a href="/accounts/{{ request.user.username }}/">Edit Profile</a>
-        <form method="POST" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-        </form>
-    {% else %}
-        <a href="{% url 'login' %}"> Login </a> <br>
-    {% endif %}
-    {% block content %}{% endblock %} {% block script %}{% endblock %}
+  <body class="{% block body_class %}{% endblock %}">
+    
+    <!-- Global Navigation Bar -->
+    <nav>
+        <div>
+            <a href="{% url 'accounts:dashboard' %}"><strong>Common Grounds</strong></a> | 
+        <!-- App Links -->
+            <a href="{% url 'localevents:event_list' %}">Local Events</a>
+            <a href="{% url 'bookclub:books' %}">Book Club</a>
+            <a href="{% url 'merchstore:item_list' %}">Merchandise Store</a>
+            <a href="{% url 'diyprojects:project_list' %}">DIY Projects</a>
+            <a href="{% url 'commissions:commissionlist' %}">Commission requests</a>
+        </div>
+        <!-- User Controls (Aligned to the right) -->
+         <div>
+            <span>
+                {% if request.user.is_authenticated %}
+                    Hi {{ request.user.profile.display_name }}! | 
+                    <a href="/accounts/{{ request.user.username }}">Edit Profile</a> | 
+                    <form method="POST" action="{% url 'logout' %}" style="display:inline">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}">Login</a>
+                {% endif %}
+            </span>
+        </div>
+
+        
+    </nav>
+
+    <!-- App Content Wrapper -->
+    <div style="margin: 20px">
+        {% block content %}{% endblock %} 
+    </div>
+    
+    {% block script %}{% endblock %}
   </body>
 </html>

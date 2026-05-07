@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/mc_form.css' %}">
+{% endblock %}
+{% block body_class %}theme-bookclub{% endblock %}
+{% block content %}
+<div class="mc-form-page">
+  <div class="mc-form-container">
+    <p class="mc-form-title">{{ heading }}</p>
+
+    <div class="mc-form-body">
+
+      <div class="mc-item-slot-panel">
+        <div class="mc-item-slot">
+          <img src="{% static 'img/enchanted_book.png' %}" class="slot-img" alt="" />
+          <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+        </div>
+      </div>
+
+      <div class="mc-enchant-panel">
+        <form method="post">
+          {% csrf_token %}
+          {% for field in form %}
+          <div class="mc-enchant-row">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+          </div>
+          {% endfor %}
+          <button type="submit" class="mc-submit-btn">Submit</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body_class %}theme-commissions{% endblock %}
+{% block content %}
+<div class="mc-form-page">
+    <div class="mc-form-container">
+
+        <h1 class="mc-form-title">Apply for {{ job.role }}</h1>
+
+        <div class="mc-form-body">
+            <div class="mc-item-slot-panel">
+                <div class="mc-item-slot">
+                    <img src="{% static 'img/gold_pickaxe.png' %}" class="slot-img" alt="" />
+                    <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                </div>
+                <div class="mc-item-info">
+                    <p><strong>Commission</strong></p>
+                    <p>{{ job.commission.title }}</p>
+                    <p><strong>Role</strong></p>
+                    <p>{{ job.role }}</p>
+                    <p><strong>Slots</strong></p>
+                    <p>{{ job.manpower_required }}</p>
+                </div>
+            </div>
+
+            <div class="mc-enchant-panel">
+                {% if error %}
+                    <div class="mc-enchant-row">
+                        <p style="color: var(--accent);">{{ error }}</p>
+                    </div>
+                {% else %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mc-enchant-row">
+                            <p style="font-size: 8px; color: var(--text-muted);">
+                                You are applying for the role of 
+                                <strong style="color: var(--text);">{{ job.role }}</strong> 
+                                in <strong style="color: var(--text);">{{ job.commission.title }}</strong>.
+                                Your application will be pending until the commission maker reviews it.
+                            </p>
+                        </div>
+                        <button type="submit" class="mc-submit-btn">Confirm Application</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <a href="{{ job.commission.get_absolute_url }}" class="back-link">← Back to Commission</a>
+
+    </div>
+</div>
+{% endblock %}

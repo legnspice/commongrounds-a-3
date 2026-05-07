@@ -1,8 +1,95 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}theme-commissions{% endblock %}
 
 {% block content %}
-    {% for Commission in object_list %}
-        <a href='{{Commission.get_absolute_url}}'>Commission {{Commission.id}}</a>
-        <br>
-    {% endfor %}
+<div class="list-page">
+
+  <div class="list-main">
+
+    {% if user.is_authenticated %}
+    <div class="user-sections">
+
+      <div class="section-box">
+        <h3>My Commissions</h3>
+        <ul class="item-list">
+          {% for commission in user_commissions %}
+          <li>
+            <a href="{{ commission.get_absolute_url }}" class="item-card">
+              <div class="item-icon">
+                <img src="{% static 'img/gold_pickaxe.png' %}" class="slot-img" alt="" />
+                <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+              </div>
+              <div>
+                <p class="item-title">{{ commission.title }}</p>
+              </div>
+            </a>
+          </li>
+          {% empty %}
+          <p class="empty-msg">No commissions posted.</p>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="section-box">
+        <h3>Applied Commissions</h3>
+        <ul class="item-list">
+          {% for commission in applied_commissions %}
+          <li>
+            <a href="{{ commission.get_absolute_url }}" class="item-card">
+              <div class="item-icon">
+                <img src="{% static 'img/gold_pickaxe.png' %}" class="slot-img" alt="" />
+                <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+              </div>
+              <div>
+                <p class="item-title">{{ commission.title }}</p>
+              </div>
+            </a>
+          </li>
+          {% empty %}
+          <p class="empty-msg">No applications yet.</p>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+    {% endif %}
+
+    <div class="list-box">
+      <h2>All Commissions</h2>
+      <ul class="item-list">
+        {% for commission in all_commissions %}
+        <li>
+          <a href="{{ commission.get_absolute_url }}" class="item-card">
+            <div class="item-icon">
+              <img src="{% static 'img/gold.png' %}" class="slot-img" alt="" />
+              <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+            </div>
+            <div>
+              <p class="item-title">{{ commission.title }}</p>
+            </div>
+          </a>
+        </li>
+        {% empty %}
+        <p class="empty-msg">No commissions available.</p>
+        {% endfor %}
+      </ul>
+    </div>
+
+  </div>
+
+  {% if user.is_authenticated %}
+  <div class="list-sidebar">
+    <a href="{% url 'commissions:commissioncreate' %}" class="sidebar-btn">
+      <div class="item-icon">
+        <img src="{% static 'img/gold_totem.png' %}" class="slot-img" alt="" />
+        <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+      </div>
+      <span>Post a commission</span>
+    </a>
+  </div>
+  {% endif %}
+
+</div>
 {% endblock %}

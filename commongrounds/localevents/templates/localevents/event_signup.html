@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}theme-localevents{% endblock %}
+
+{% block content %}
+<div class="mc-form-page">
+    <div class="mc-form-container">
+
+        <h1 class="mc-form-title">Sign Up for Event</h1>
+
+        <div class="mc-form-body">
+            <div class="mc-item-slot-panel">
+                <div class="mc-item-slot">
+                    <img src="{% static 'img/netherite.png' %}" class="slot-img" alt="" />
+                    <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                </div>
+                <div class="mc-item-info">
+                    <p><strong>{{ event.title }}</strong></p>
+                    <p>{{ event.start_time|date:"M d, Y" }}</p>
+                    <p>{{ event.location }}</p>
+                    <p>{{ spots_remaining }} spots left</p>
+                </div>
+            </div>
+
+            <div class="mc-enchant-panel">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mc-enchant-row">
+                        <label for="new_registrant">Your Full Name</label>
+                        <input type="text" name="new_registrant" id="new_registrant" required placeholder="John Doe">
+                    </div>
+                    <button type="submit" class="mc-submit-btn">Confirm Registration</button>
+                </form>
+            </div>
+        </div>
+
+        <a href="{% url 'localevents:event_detail' event.pk %}" class="back-link">← Go Back</a>
+
+    </div>
+</div>
+{% endblock %}

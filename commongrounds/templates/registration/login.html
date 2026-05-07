@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Login Page</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Log In</button>
-    </form>
-    <a href="{% url 'password_reset' %}"> Forgot?: [Reset Password]</a>
+<div class="login-page">
+    <div class="login-container">
+        <h1 class="mc-form-title">Login</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="mc-submit-btn">Log In</button>
+        </form>
+        <a href="{% url 'password_reset' %}">Forgot password? Reset here</a>
+    </div>
+</div>
 {% endblock %}

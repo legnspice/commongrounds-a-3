@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}theme-dashboard{% endblock %}
+
+{% block content %}
+<div class="inventory-page">
+
+    <div class="inventory-header">
+        <h1 class="mc-form-title">{{ user.profile.display_name }}'s Inventory</h1>
+    </div>
+
+    <div class="inventory-layout">
+
+        <div class="inventory-grid">
+            <div>
+            <a href="{% url 'merchstore:item_list' %}" class="inventory-section theme-merchstore-slot">
+                <div class="inventory-slot-header">
+                    <div class="mc-item-slot">
+                        <img src="{% static 'img/diamond.png' %}" class="slot-img" alt="" />
+                        <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                    </div>
+                    <div>
+                        <p class="inventory-slot-title">Merch Store</p>
+                        <p class="inventory-slot-count">{{ products.count }} products</p>
+                    </div>
+                </div>
+                <ul class="inventory-item-list">
+                    {% for product in products %}
+                        <li class="inventory-item">{{ product.name }}</li>
+                    {% empty %}
+                        <li class="inventory-empty">No products listed yet.</li>
+                    {% endfor %}
+                </ul>
+            </a>
+
+            <a href="{% url 'localevents:event_list' %}" class="inventory-section theme-localevents-slot">
+                <div class="inventory-slot-header">
+                    <div class="mc-item-slot">
+                        <img src="{% static 'img/netherite.png' %}" class="slot-img" alt="" />
+                        <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                    </div>
+                    <div>
+                        <p class="inventory-slot-title">Local Events</p>
+                        <p class="inventory-slot-count">{{ events.count }} events</p>
+                    </div>
+                </div>
+                <ul class="inventory-item-list">
+                    {% for event in events %}
+                        <li class="inventory-item">{{ event.title }}</li>
+                    {% empty %}
+                        <li class="inventory-empty">No events organized yet.</li>
+                    {% endfor %}
+                </ul>
+            </a>
+
+            <a href="{% url 'bookclub:books' %}" class="inventory-section theme-bookclub-slot">
+                <div class="inventory-slot-header">
+                    <div class="mc-item-slot">
+                        <img src="{% static 'img/enchanted_book.png' %}" class="slot-img" alt="" />
+                        <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                    </div>
+                    <div>
+                        <p class="inventory-slot-title">Book Club</p>
+                        <p class="inventory-slot-count">{{ books.count }} books</p>
+                    </div>
+                </div>
+                <ul class="inventory-item-list">
+                    {% for book in books %}
+                        <li class="inventory-item">{{ book.title }}</li>
+                    {% empty %}
+                        <li class="inventory-empty">No books contributed yet.</li>
+                    {% endfor %}
+                </ul>
+            </a>
+
+            <a href="{% url 'diyprojects:project_list' %}" class="inventory-section theme-diyprojects-slot">
+                <div class="inventory-slot-header">
+                    <div class="mc-item-slot">
+                        <img src="{% static 'img/leather.png' %}" class="slot-img" alt="" />
+                        <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                    </div>
+                    <div>
+                        <p class="inventory-slot-title">DIY Projects</p>
+                        <p class="inventory-slot-count">{{ projects.count }} projects</p>
+                    </div>
+                </div>
+                <ul class="inventory-item-list">
+                    {% for project in projects %}
+                        <li class="inventory-item">{{ project.title }}</li>
+                    {% empty %}
+                        <li class="inventory-empty">No projects created yet.</li>
+                    {% endfor %}
+                </ul>
+            </a>
+
+            <a href="{% url 'commissions:commissionlist' %}" class="inventory-section theme-commissions-slot">
+                <div class="inventory-slot-header">
+                    <div class="mc-item-slot">
+                        <img src="{% static 'img/gold_totem.png' %}" class="slot-img" alt="" />
+                        <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                    </div>
+                    <div>
+                        <p class="inventory-slot-title">Commissions</p>
+                        <p class="inventory-slot-count">{{ commissions.count }} commissions</p>
+                    </div>
+                </div>
+                <ul class="inventory-item-list">
+                    {% for commission in commissions %}
+                        <li class="inventory-item">{{ commission.title }}</li>
+                    {% empty %}
+                        <li class="inventory-empty">No commissions created yet.</li>
+                    {% endfor %}
+                </ul>
+            </a>
+        </div>
+    </div>
+    <div class="inventory-portrait">
+        <div class="portrait-frame">
+            <img src="{% static 'img/masked.png' %}" class="portrait-img" alt="{{ user.profile.display_name }}" />
+            <img src="{% static 'img/unmasked.png' %}" class="portrait-img-hover" alt="AHA" />
+        </div>
+    </div>
+</div>
+{% endblock %}

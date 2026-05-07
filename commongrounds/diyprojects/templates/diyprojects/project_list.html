@@ -1,19 +1,131 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>DIY Projects</title>
-</head>
-<body>
-    <h1>DIY Projects</h1>
-    <ul>
-        {% for project in projects %}
-        <li>
-            <a href="/diyprojects/project/{{ project.pk }}">{{ project.title }}</a>
-            - {{ project.category }} - {{ project.created_on }}
-        </li>
-        {% empty %}
-        <li>No projects yet.</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}theme-diyprojects{% endblock %}
+{% block title %}DIY Projects{% endblock %}
+
+{% block content %}
+<div class="list-page">
+
+    <div class="list-main">
+
+        {% if request.user.is_authenticated %}
+
+            <div class="user-sections">
+                <div class="section-box">
+                    <h3>My Projects</h3>
+                    <ul class="item-list">
+                        {% for project in created %}
+                            <a href="{% url 'diyprojects:project_detail' pk=project.pk %}" class="item-card">
+                                <div class="item-icon">
+                                    <img src="{% static 'img/emerald.png' %}" class="slot-img" alt="" />
+                                    <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                                </div>
+                                <div>
+                                    <p class="item-title">{{ project.title }}</p>
+                                    <p class="item-subtitle">{{ project.category }} · {{ project.created_on|date:"M d, Y" }}</p>
+                                </div>
+                            </a>
+                        {% empty %}
+                            <p class="empty-msg">No projects created yet.</p>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="section-box">
+                    <h3>Favorited</h3>
+                    <ul class="item-list">
+                        {% for project in favorited %}
+                            <a href="{% url 'diyprojects:project_detail' pk=project.pk %}" class="item-card">
+                                <div class="item-icon">
+                                    <img src="{% static 'img/emerald.png' %}" class="slot-img" alt="" />
+                                    <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                                </div>
+                                <div>
+                                    <p class="item-title">{{ project.title }}</p>
+                                    <p class="item-subtitle">{{ project.category }} · {{ project.created_on|date:"M d, Y" }}</p>
+                                </div>
+                            </a>
+                        {% empty %}
+                            <p class="empty-msg">No favorited projects.</p>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="section-box">
+                    <h3>Reviewed</h3>
+                    <ul class="item-list">
+                        {% for project in reviewed %}
+                            <a href="{% url 'diyprojects:project_detail' pk=project.pk %}" class="item-card">
+                                <div class="item-icon">
+                                    <img src="{% static 'img/emerald.png' %}" class="slot-img" alt="" />
+                                    <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                                </div>
+                                <div>
+                                    <p class="item-title">{{ project.title }}</p>
+                                    <p class="item-subtitle">{{ project.category }} · {{ project.created_on|date:"M d, Y" }}</p>
+                                </div>
+                            </a>
+                        {% empty %}
+                            <p class="empty-msg">No reviewed projects.</p>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="list-box">
+                <h2>All Projects</h2>
+                <ul class="item-list">
+                    {% for project in remaining %}
+                        <a href="{% url 'diyprojects:project_detail' pk=project.pk %}" class="item-card">
+                            <div class="item-icon">
+                                <img src="{% static 'img/leather.png' %}" class="slot-img" alt="" />
+                                <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                            </div>
+                            <div>
+                                <p class="item-title">{{ project.title }}</p>
+                                <p class="item-subtitle">{{ project.category }} · {{ project.created_on|date:"M d, Y" }}</p>
+                            </div>
+                        </a>
+                    {% empty %}
+                        <p class="empty-msg">No other projects.</p>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        {% else %}
+            <div class="list-box">
+                <h2>All Projects</h2>
+                <ul class="item-list">
+                    {% for project in projects %}
+                        <a href="{% url 'diyprojects:project_detail' pk=project.pk %}" class="item-card">
+                            <div class="item-icon">
+                                <img src="{% static 'img/leather.png' %}" class="slot-img" alt="" />
+                                <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                            </div>
+                            <div>
+                                <p class="item-title">{{ project.title }}</p>
+                                <p class="item-subtitle">{{ project.category }} · {{ project.created_on|date:"M d, Y" }}</p>
+                            </div>
+                        </a>
+                    {% empty %}
+                        <p class="empty-msg">No projects yet.</p>
+                    {% endfor %}
+                 </ul>
+            </div>
+        {% endif %}
+
+    </div>
+
+    <div class="list-sidebar">
+        <a href="{% url 'diyprojects:project_create' %}" class="sidebar-btn">
+            <div class="item-icon">
+                <img src="{% static 'img/bundle.png' %}" class="slot-img" alt="" />
+                <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+            </div>
+            <span>Create a Project</span>
+        </a>
+    </div>
+
+</div>
+{% endblock %}

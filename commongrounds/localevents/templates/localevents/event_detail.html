@@ -1,25 +1,98 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ event.title }}</title>
-</head>
-<body>
-    <h1>{{ event.title }}</h1>
-    
-    <div>
-        <p><strong>Category:</strong> {{ event.category.name|default:"Uncategorized" }}</p>
-        <p><strong>Location:</strong> {{ event.location }}</p>
-        <p><strong>Start Time:</strong> {{ event.start_time }}</p>
-        <p><strong>End Time:</strong> {{ event.end_time }}</p>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}theme-localevents{% endblock %}
+
+{% block content %}
+<div class="detail-page">
+
+    <div class="detail-header">
+        <div>
+            <h1>{{ event.title }}</h1>
+            <h2>{{ event.category.name }}</h2>
+        </div>
     </div>
 
-    <div>
-        <h2>Description</h2>
-        <p>{{ event.description }}</p>
+    <div class="detail-info-panel">
+        <div class="list-box">
+
+            {% if event.event_image %}
+                <img src="{{ event.event_image.url }}" alt="{{ event.title }}" style="width: 100%; margin-bottom: 12px;">
+            {% endif %}
+
+            <div class="info-row">
+                <span class="info-label">Location</span>
+                <span class="info-value">{{ event.location }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Start</span>
+                <span class="info-value">{{ event.start_time|date:"M d, Y h:i A" }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">End</span>
+                <span class="info-value">{{ event.end_time|date:"M d, Y h:i A" }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Status</span>
+                <span class="info-value">{{ event.status }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Signups</span>
+                <span class="info-value">{{ event.signups.count }} / {{ event.event_capacity }}</span>
+            </div>
+
+            <div class="detail-subsection">
+                <h3>About</h3>
+                <p class="detail-card-body">{{ event.description }}</p>
+            </div>
+
+            <div class="detail-subsection">
+                {% if user.is_authenticated and user.profile in event.organizer.all %}
+                    <p class="detail-card-meta">You are organizing this event.</p>
+                    <div style="display: flex; gap: 8px; margin-top: 8px;">
+                        <a href="{% url 'localevents:event_update' event.pk %}" class="action-btn primary">Edit Event</a>
+                        <a href="{% url 'localevents:event_delete' event.pk %}" class="action-btn">Delete Event</a>
+                    </div>
+
+                {% elif is_registered %}
+                    <p class="detail-card-meta">You are signed up for this event!</p>
+                    <form action="{% url 'localevents:event_cancel' event.pk %}" method="POST" style="margin-top: 8px;">
+                        {% csrf_token %}
+                        <button type="submit" class="action-btn">Cancel Registration</button>
+                    </form>
+
+                {% else %}
+                    {% if event.signups.count >= event.event_capacity %}
+                        <button class="action-btn" disabled>Event Full</button>
+                    {% elif user.is_authenticated %}
+                        <form action="{% url 'localevents:event_signup' event.pk %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="action-btn primary">Sign Up</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'localevents:event_signup' event.pk %}" class="action-btn primary">Sign Up</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+        <a href="{% url 'localevents:event_list' %}" class="back-link">← Back to Events</a>
     </div>
 
-    <hr>
-    <a href="{% url 'localevents:event_list' %}">Back to Events List</a>
-</body>
-</html>
+    <div class="detail-side-panel">
+        <div class="list-box" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+            <h2>Attendees</h2>
+            <div class="detail-scroll">
+                {% for signup in event.signups.all %}
+                    <div class="detail-card">
+                        <p class="detail-card-meta">{{ signup.user_registrant.display_name }}</p>
+                    </div>
+                {% empty %}
+                    <p class="empty-msg">No signups yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

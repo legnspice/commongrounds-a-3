@@ -1,10 +1,125 @@
-{% extends 'base.html' %} {% block content %}
-<h2>Book List</h2>
-<ul>
-  {% for book in books %}
-  <li>
-    <a href="{{book.get_absolute_url}}">{{book.title}}</a> by {{book.author}}
-  </li>
-  {% endfor %}
-</ul>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}theme-bookclub{% endblock %}
+
+{% block content %}
+<div class="list-page">
+
+  <div class="list-main">
+
+    {% if user.is_authenticated %}
+    <div class="user-sections">
+
+      <div class="section-box">
+        <h3>Contributed</h3>
+        <ul class="item-list">
+          {% for book in contributed_books %}
+          <li>
+            <a href="{{ book.get_absolute_url }}" class="item-card">
+              <div class="item-icon">
+                <img src="{% static 'img/enchanted_book.png' %}" class="slot-img" alt="" />
+                <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+              </div>
+              <div>
+                <p class="item-title">{{ book.title }}</p>
+                <p class="item-subtitle">{{ book.author }}</p>
+              </div>
+            </a>
+          </li>
+          {% empty %}
+          <p class="empty-msg">None yet</p>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="section-box">
+        <h3>Bookmarked</h3>
+        <ul class="item-list">
+          {% for book in bookmarked_books %}
+          <li>
+            <a href="{{ book.get_absolute_url }}" class="item-card">
+              <div class="item-icon">
+                <img src="{% static 'img/enchanted_book.png' %}" class="slot-img" alt="" />
+                <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+              </div>
+              <div>
+                <p class="item-title">{{ book.title }}</p>
+                <p class="item-subtitle">{{ book.author }}</p>
+              </div>
+            </a>
+          </li>
+          {% empty %}
+          <p class="empty-msg">None yet</p>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="section-box">
+        <h3>Reviewed</h3>
+        <ul class="item-list">
+          {% for book in reviewed_books %}
+          <li>
+            <a href="{{ book.get_absolute_url }}" class="item-card">
+              <div class="item-icon">
+                <img src="{% static 'img/enchanted_book.png' %}" class="slot-img" alt="" />
+                <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+              </div>
+              <div>
+                <p class="item-title">{{ book.title }}</p>
+                <p class="item-subtitle">{{ book.author }}</p>
+              </div>
+            </a>
+          </li>
+          {% empty %}
+          <p class="empty-msg">None yet</p>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+    {% endif %}
+
+    <div class="list-box">
+      {% if user.is_authenticated %}
+      <h2>All other books</h2>
+      {% else %}
+      <h2>All Books</h2>
+      {% endif %}
+
+      <ul class="item-list">
+        {% for book in all_books %}
+        <li>
+          <a href="{{ book.get_absolute_url }}" class="item-card">
+            <div class="item-icon">
+              <img src="{% static 'img/book.png' %}" class="slot-img" alt="" />
+              <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+            </div>
+            <div>
+              <p class="item-title">{{ book.title }}</p>
+              <p class="item-subtitle">{{ book.author }}</p>
+            </div>
+          </a>
+        </li>
+        {% empty %}
+        <p class="empty-msg">No books yet</p>
+        {% endfor %}
+      </ul>
+    </div>
+
+  </div>
+
+  {% if user.is_authenticated %}
+  <div class="list-sidebar">
+    <a href="{% url 'bookclub:book_create' %}" class="sidebar-btn">
+      <div class="item-icon">
+          <img src="{% static 'img/book_quill.png' %}" class="slot-img" alt="" />
+          <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+      </div>
+      <span>Add a book</span>
+    </a>
+  </div>
+  {% endif %}
+
+</div>
 {% endblock %}

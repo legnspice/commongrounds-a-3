@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}theme-merchstore{% endblock %}
+
+{% block content %}
+<div class="list-page">
+
+    <div class="list-main">
+
+        {% for owner, transactions in grouped.items %}
+            <div class="list-box">
+                <h2>{{ owner.displayName }}</h2>
+                <ul class="item-list">
+                    {% for t in transactions %}
+                        <div class="item-card">
+                            <div class="item-icon">
+                                <img src="{% static 'img/diamond_helmet.png' %}" class="slot-img" alt="" />
+                                <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                            </div>
+                            <div>
+                                <p class="item-title">{{ t.product.name }} x{{ t.amount }}</p>
+                                <p class="item-subtitle">Status: {{ t.status }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% empty %}
+            <div class="list-box">
+                <p class="empty-msg">No transactions yet.</p>
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <div class="list-sidebar">
+        <a href="{% url 'merchstore:item_list' %}" class="sidebar-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+            <span>Back to Store</span>
+        </a>
+    </div>
+
+</div>
+{% endblock %}

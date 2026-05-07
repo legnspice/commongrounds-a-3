@@ -1,15 +1,82 @@
-{% extends 'merchstore/base_merchstore.html' %} {% block app_content %}
-<h1>Merchandise Store</h1>
+{% extends 'base.html' %}
+{% load static %}
 
-<ul>
-  {% for product in object_list %}
-  <li>
-    <h2>{{ product.name }}</h2>
-    <p>Product Type: {{ product.product_type.name }}</p>
-    <p><strong>Price:</strong> ${{ product.price }}</p>
-    <p><a href="{{ product.get_absolute_url }}">See Details</a></p>
-  </li>
-  {% endfor %}
-</ul>
+{% block body_class %}theme-merchstore{% endblock %}
 
+{% block content %}
+<div class="list-page">
+
+    <div class="list-main">
+
+        {% if request.user.is_authenticated%}
+            <div class="list-box">
+                <h2>My Products</h2>
+                <ul class="item-list">
+                    {% for product in my_products %}
+                        <a href="{{ product.get_absolute_url }}" class="item-card">
+                            <div class="item-icon">
+                              <img src="{% static 'img/diamond_helmet.png' %}" class="slot-img" alt="" />
+                              <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                            </div>
+                            <div>
+                                <p class="item-title">{{ product.name }}</p>
+                                <p class="item-subtitle">{{ product.product_type.name }} · ${{ product.price }} · {{ product.status }}</p>
+                            </div>
+                        </a>
+                    {% empty %}
+                        <p class="empty-msg">No products yet.</p>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <div class="list-box">
+            <h2>All Products</h2>
+            <ul class="item-list">
+                {% for product in products %}
+                    <a href="{{ product.get_absolute_url }}" class="item-card">
+                        <div class="item-icon">
+                          <img src="{% static 'img/diamond.png' %}" class="slot-img" alt="" />
+                          <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                        </div>
+                        <div>
+                            <p class="item-title">{{ product.name }}</p>
+                            <p class="item-subtitle">{{ product.product_type.name }} · ${{ product.price }} · Stock: {{ product.stock }}</p>
+                        </div>
+                    </a>
+                {% empty %}
+                    <p class="empty-msg">No products available.</p>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="list-sidebar">
+        <a href="{% url 'merchstore:item_create' %}" class="sidebar-btn">
+            <div class="item-icon">
+              <img src="{% static 'img/trident.png' %}" class="slot-img" alt="" />
+              <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+            </div>
+            <span>Add a Product</span>
+        </a>
+        <a href="{% url 'merchstore:cart' %}" class="sidebar-btn">
+            <div class="item-icon">
+              <img src="{% static 'img/pearl.png' %}" class="slot-img" alt="" />
+              <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+            </div>
+            <span>Cart</span>
+          </a>
+            <a href="{% url 'merchstore:transaction_list' %}" class="sidebar-btn">
+            <div class="item-icon">
+              <img src="{% static 'img/ender.png' %}" class="slot-img" alt="" />
+              <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+            </div>
+            <span>Transactions</span>
+          </a>
+
+    </div>
+
+
+</div>
 {% endblock %}
