@@ -44,18 +44,3 @@ def dashboard(request):
     }
 
     return render(request, "dashboard.html", context)
-
-def dashboard_2(request):
-    context = {}
-
-    if request.user.is_authenticated:
-        profile = request.user.profile
-        context = {
-            "products": Product.objects.filter(owner=profile),
-            "events": Event.objects.filter(organizer=profile),
-            "books": Book.objects.filter(contributor=profile),
-            "projects": Project.objects.filter(creator=profile),
-            "commissions": Commission.objects.filter(maker=profile),
-        }
-
-    return render(request, "accounts/dashboard_alt.html", context)
