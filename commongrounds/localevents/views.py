@@ -12,7 +12,6 @@ from .models import Event, EventSignup
 
 
 class EventListView(ListView):
-    """Displays grouped lists of community events."""
     model = Event
     template_name = 'localevents/event_list.html'
     context_object_name = 'all_events'
@@ -35,7 +34,6 @@ class EventListView(ListView):
 
 
 class EventDetailView(DetailView):
-    """Displays details for a single event."""
     model = Event
     template_name = 'localevents/event_detail.html'
     context_object_name = 'event'
@@ -55,7 +53,6 @@ class EventDetailView(DetailView):
 
 
 class EventCreateView(RoleRequiredMixin, CreateView):
-    """Allows Event Organizers to create new events."""
     model = Event
     form_class = EventForm
     template_name = 'localevents/event_form.html'
@@ -69,7 +66,6 @@ class EventCreateView(RoleRequiredMixin, CreateView):
 
 
 class BaseSignupView(View):
-    """Abstract base CBV defining the Template Method skeleton."""
     
     def post(self, request, pk, *args, **kwargs):
         event = get_object_or_404(Event, pk=pk)
@@ -82,7 +78,6 @@ class BaseSignupView(View):
             messages.error(request, "You cannot sign up for your own event.")
             return redirect(self.get_redirect_url(event))
 
-        # Rubric strict signature: (event, user)
         self.create_signup(event, request.user)
         
         if event.signups.count() >= event.event_capacity:
@@ -108,16 +103,12 @@ class BaseSignupView(View):
 
 
 class EventSignupView(BaseSignupView):
-    """Concrete implementation of the BaseSignupView."""
-    
     def get(self, request, pk):
         """Rubric Requirement: Dedicated form view for guests."""
         event = get_object_or_404(Event, pk=pk)
         if request.user.is_authenticated:
-            # Logged in users shouldn't see the form, they 1-click sign up
             return redirect('localevents:event_detail', pk=pk)
             
-        # Do the math safely in Python
         spots_left = event.event_capacity - event.signups.count()
         
         return render(request, 'localevents/event_signup.html', {
@@ -129,7 +120,6 @@ class EventSignupView(BaseSignupView):
         if user.is_authenticated and hasattr(user, 'profile'):
             EventSignup.objects.create(user_registrant=user.profile, event=event)
         else:
-            # We pull the data directly from the class request object
             guest_name = self.request.POST.get('new_registrant')
             if guest_name:
                 EventSignup.objects.create(new_registrant=guest_name, event=event)
@@ -151,7 +141,6 @@ class EventUpdateView(RoleRequiredMixin, UpdateView):
         if self.object.signups.count() >= self.object.event_capacity:
             self.object.status = 'Full'
         else:
-            # Only revert to Available if it's currently Full (don't override Done/Cancelled)
             if self.object.status == 'Full':
                 self.object.status = 'Available'
         self.object.save()
@@ -159,7 +148,6 @@ class EventUpdateView(RoleRequiredMixin, UpdateView):
 
 
 class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    """Allows the organizing Profile to delete their event."""
     model = Event
     template_name = 'localevents/event_confirm_delete.html'
     success_url = reverse_lazy('localevents:event_list')
@@ -172,7 +160,6 @@ class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 
 class EventCancelSignUpView(LoginRequiredMixin, View):
-    """Allows users to cancel their registration."""
     
     def post(self, request, pk):
         event = get_object_or_404(Event, pk=pk)
@@ -186,7 +173,6 @@ class EventCancelSignUpView(LoginRequiredMixin, View):
             if signup:
                 signup.delete()
                 
-                # Auto-update status if it falls below capacity
                 if event.signups.count() < event.event_capacity and event.status == 'Full':
                     event.status = 'Available'
                     event.save()

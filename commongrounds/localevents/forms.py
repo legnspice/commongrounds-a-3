@@ -39,7 +39,6 @@ class EventForm(forms.ModelForm):
             field.widget.attrs.update({'class': 'form-control'})
 
     class GuestSignupForm(forms.Form):
-        """Form for guests to sign up using only their name."""
 
         new_registrant = forms.CharField(
             max_length=200,

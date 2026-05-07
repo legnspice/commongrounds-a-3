@@ -4,21 +4,17 @@ from accounts.models import Profile
 
 
 class EventType(models.Model):
-    """Model representing the category of an event."""
-
     name = models.CharField(max_length=255)
     description = models.TextField()
 
     class Meta:
-        ordering = ['name']  # Rubric Ascending Order!
+        ordering = ['name']
 
     def __str__(self):
         return self.name
 
 
 class Event(models.Model):
-    """Model representing a community event."""
-
     STATUS_CHOICES = (
         ('Available', 'Available'),
         ('Full', 'Full'),
@@ -53,8 +49,6 @@ class Event(models.Model):
 
 
 class EventSignup(models.Model):
-    """Model representing a user or guest registration for an event."""
-
     user_registrant = models.ForeignKey(
         Profile, 
         on_delete=models.CASCADE, 
@@ -67,7 +61,6 @@ class EventSignup(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        # Prevents logged-in users from signing up for the same event twice
         constraints = [
             models.UniqueConstraint(
                 fields=['user_registrant', 'event'], 
