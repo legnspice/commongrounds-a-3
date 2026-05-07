@@ -18,12 +18,12 @@ class Role(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    displayName = models.CharField(max_length=63)
-    emailAddress = models.EmailField()
+    display_name = models.CharField(max_length=63)
+    email_address = models.EmailField()
     roles = models.ManyToManyField(Role, related_name="profiles", blank=True)
 
     def has_role(self, role_name):
         return self.roles.filter(name=role_name).exists()
 
     def __str__(self):
-        return self.displayName
+        return self.display_name

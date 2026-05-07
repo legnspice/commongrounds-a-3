@@ -21,7 +21,7 @@
         <!-- User Controls (Aligned to the right) -->
         <span style="float: right;">
             {% if request.user.is_authenticated %}
-                Hi {{ request.user.profile.displayName }}! | 
+                Hi {{ request.user.profile.display_name }}! | 
                 <a href="/accounts/{{ request.user.username }}/" style="margin-right: 10px;">Edit Profile</a>
                 
                 <form method="POST" action="{% url 'logout' %}" style="display: inline;">

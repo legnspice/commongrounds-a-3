@@ -3,7 +3,7 @@
 <h1>My Transactions</h1>
 
 {% for buyer, transactions in grouped.items %}
-  <h2>Buyer: {{ buyer.displayName }}</h2>
+  <h2>Buyer: {{ buyer.display_name }}</h2>
   <ul>
     {% for t in transactions %}
     <li>

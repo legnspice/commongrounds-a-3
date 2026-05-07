@@ -24,7 +24,7 @@
     <hr style="color: black;">
 
     {% for review in book.reviews.all %}
-        <p> {% if review.user_reviewer %} {{review.user_reviewer.displayName}} {% else %} {{review.anon_reviewer}} {% endif %}</p> 
+        <p> {% if review.user_reviewer %} {{review.user_reviewer.display_name}} {% else %} {{review.anon_reviewer}} {% endif %}</p> 
         <p> <strong> {{review.title}} </strong></p>
         <p> {{review.comment}} </p>
     {% empty %}
@@ -50,7 +50,7 @@
             <li>
                 Borrowed by 
                 {% if borrow.borrower %}
-                    {{ borrow.borrower.displayName }}
+                    {{ borrow.borrower.display_name }}
                 {% else %}
                     {{ borrow.name }}
                 {% endif %}

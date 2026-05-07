@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <a href={% url 'commissions:commissioncreate'%}>Post a Commission</a>
+    <a href="{% url 'commissions:commissioncreate' %}">Post a Commission</a>
 
     {% if user.is_authenticated %}
 

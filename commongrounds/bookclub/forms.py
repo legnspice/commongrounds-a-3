@@ -64,5 +64,5 @@ class BookBorrowForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         if user and user.is_authenticated:
-            self.fields['name'].initial = user.profile.displayName
+            self.fields['name'].initial = user.profile.display_name
             self.fields['name'].disabled = True

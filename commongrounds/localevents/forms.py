@@ -4,8 +4,6 @@ from .models import Event
 
 
 class EventForm(forms.ModelForm):
-    """Form for creating and updating community events."""
-
     class Meta:
         model = Event
         fields = [
