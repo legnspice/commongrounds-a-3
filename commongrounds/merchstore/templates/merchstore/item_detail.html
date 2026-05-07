@@ -2,27 +2,66 @@
 {% load static %}
 
 {% block body_class %}theme-merchstore{% endblock %}
+
 {% block content %}
-<p>Item {{ product.id }}</p>
-<h1>Name: {{ product.name }}</h1>
-<p>Product Type: {{ product.product_type.name }}</p>
-<p>Description: {{ product.description }}</p>
-<p>Price: {{ product.price }}</p>
-<p>Stock: {{ product.stock }}</p>
-<p>Status: {{ product.status }}</p>
+<div class="detail-page">
 
-{% if request.user.is_authenticated and product.owner == request.user.profile %}
-  <a href="{% url 'merchstore:item_update' product.pk %}">Edit Product</a>
-{% endif %}
+    <div class="detail-header">
+        <div>
+            <h1>{{ product.name }}</h1>
+            <h2>{{ product.product_type.name }}</h2>
+        </div>
+    </div>
 
-{% if not request.user.is_authenticated or product.owner != request.user.profile %}
-  <form method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit" {% if product.stock == 0 %}disabled{% endif %}>Buy</button>
-  </form>
-{% endif %}
+    <div class="detail-info-panel">
+        <div class="list-box">
 
-<a href="{% url 'merchstore:item_list' %}">Back to Store</a>
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; margin-bottom: 12px;">
+            {% endif %}
 
+            <div class="info-row">
+                <span class="info-label">Price</span>
+                <span class="info-value">${{ product.price }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Stock</span>
+                <span class="info-value">{{ product.stock }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Status</span>
+                <span class="info-value">{{ product.status }}</span>
+            </div>
+
+            <div class="detail-subsection">
+                <h3>Description</h3>
+                <p class="detail-card-body">{{ product.description }}</p>
+            </div>
+
+            <div class="detail-subsection">
+                {% if request.user.is_authenticated and product.owner == request.user.profile %}
+                    <a href="{% url 'merchstore:item_update' product.pk %}" class="action-btn primary">Edit Product</a>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <a href="{% url 'merchstore:item_list' %}" class="back-link">← Back to Store</a>
+    </div>
+    <div class="detail-side-panel">
+        {% if not request.user.is_authenticated or product.owner != request.user.profile %}
+            <div class="list-box">
+                <h2>Purchase</h2>
+                <form method="POST" class="side-form">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="mc-submit-btn" {% if product.stock == 0 %}disabled{% endif %}>
+                        {% if product.stock == 0 %}Out of Stock{% else %}Buy{% endif %}
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
 {% endblock %}
