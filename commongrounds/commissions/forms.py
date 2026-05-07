@@ -1,5 +1,5 @@
 from django import forms
-from .models import Commission,Job
+from .models import Commission,Job, JobApplication
 from django.forms import inlineformset_factory
 
 class CommissionForm(forms.ModelForm):
@@ -17,3 +17,8 @@ JobFormSet = inlineformset_factory(
     extra=5,            
     can_delete=True,  
 )
+
+class JobApplicationStatusForm(forms.ModelForm):
+    class Meta:
+        model = JobApplication
+        fields = ['status']

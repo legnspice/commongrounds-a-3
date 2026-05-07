@@ -138,3 +138,22 @@ def JobApplicationCreateView(request, job_pk):
 
     context = {'job': job}
     return render(request, "jobapplication_form.html", context)
+
+from .forms import JobApplicationStatusForm
+
+def MyApplicationsView(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    applications = request.user.profile.jobapplications_profile.all()
+
+    if request.method == 'POST':
+        app_id = request.POST.get('application_id')
+        application = applications.get(pk=app_id)
+        form = JobApplicationStatusForm(request.POST, instance=application)
+        if form.is_valid():
+            form.save()
+        return redirect('commissions:myapplications')
+
+    context = {"applications": applications}
+    return render(request, "my_applications.html", context)
