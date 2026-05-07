@@ -42,6 +42,21 @@ body {
     font-size: 10px;
     line-height: 1.8;
 }
+body.theme-dashboard {
+    --bg: #1a1208;
+    --bg-raised: #2a1e0f;
+    --bg-stone: #221808;
+    --accent: #c8a464;
+    --accent-gold: #d4aa50;
+    --accent-brown: #8b6343;
+    --text: #e8d5b0;
+    --text-muted: #8a7055;
+    --border: #4a3018;
+    --border-bright: #7a5530;
+    --glow: rgba(200, 160, 80, 0.1);
+    --shadow: #0a0800;
+}
+
 body.theme-bookclub {
     --bg: #f0e6cc;
     --bg-raised: #e8d9b0;
@@ -162,3 +177,197 @@ nav a:hover {
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background-color: var(--border); }
+
+.inventory-page {
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.inventory-header {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.inventory-layout {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.inventory-grid {
+    display: grid;
+    grid-template-columns: 1fr, 1fr;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;   
+}
+
+.inventory-portrait {
+    flex-shrink: 0;
+    position: sticky;
+    top: 20px;
+}
+
+.portrait-frame {
+    height: 100%;
+    border: 3px solid var(--border-bright);
+    outline: 2px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    background-color: var(--bg-raised);
+}
+
+.portrait-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    image-rendering: pixelated;
+    transition: opacity 0.3s ease;
+}
+
+.portrait-img-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    image-rendering: pixelated;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.portrait-frame:hover .portrait-img {
+    opacity: 0;
+}
+
+.portrait-frame:hover .portrait-img-hover {
+    opacity: 1;
+}
+
+.inventory-section {
+    background-color: var(--bg-raised);
+    border: 3px solid var(--border-bright);
+    outline: 2px solid var(--border);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-decoration: none;
+    transition: border-color 0.1s, outline-color 0.1s;
+    cursor: pointer;
+}
+
+.inventory-section:hover {
+    border-color: var(--accent-gold);
+    outline-color: var(--accent-gold);
+}
+
+.inventory-slot-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 10px;
+}
+
+.inventory-slot-title {
+    font-size: 9px;
+    color: var(--text);
+    margin: 0 0 4px;
+}
+
+.inventory-slot-count {
+    font-size: 7px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.inventory-item-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.inventory-item {
+    font-size: 7px;
+    color: var(--text-muted);
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 2;
+}
+
+.inventory-empty {
+    font-size: 7px;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+
+.theme-merchstore-slot:hover { border-color: #2aaa9a; outline-color: #2aaa9a; }
+.theme-localevents-slot:hover { border-color: #9b6cc7; outline-color: #9b6cc7; }
+.theme-bookclub-slot:hover { border-color: #e9dab4; outline-color: #e9dab4; }
+.theme-diyprojects-slot:hover { border-color: #4a9a2a; outline-color: #4a9a2a; }
+.theme-commissions-slot:hover { border-color: #B8860B; outline-color: #B8860B; }
+
+
+.slot-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+    transition: opacity 0.3s ease;
+}
+
+.slot-img-hover {
+    position: absolute;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mc-item-slot:hover .slot-img {
+    opacity: 0;
+}
+
+.mc-item-slot:hover .slot-img-hover {
+    opacity: 1;
+}
+
+.item-icon:hover .slot-img {
+    opacity: 0;
+}
+
+.item-icon:hover .slot-img-hover {
+    opacity: 1;
+}
+
+.login-page {
+    max-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-container {
+    background-color: var(--bg-raised);
+    border: 3px solid var(--border-bright);
+    outline: 2px solid var(--border);
+    padding: 24px;
+    width: 100%;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}

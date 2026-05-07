@@ -40,19 +40,11 @@
     width: 56px;
     height: 56px;
     background-color: var(--bg-stone);
-    border-top: 3px solid var(--border);
-    border-left: 3px solid var(--border);
-    border-bottom: 3px solid var(--bg-raised);
-    border-right: 3px solid var(--bg-raised);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.mc-item-slot svg {
-    width: 36px;
-    height: 36px;
-}
 
 .mc-item-info {
     display: flex;

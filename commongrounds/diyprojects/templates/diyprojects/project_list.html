@@ -18,9 +18,8 @@
                         {% for project in created %}
                             <a href="{% url 'diyprojects:project_detail' pk=project.pk %}" class="item-card">
                                 <div class="item-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                                    </svg>
+                                    <img src="{% static 'img/emerald.png' %}" class="slot-img" alt="" />
+                                    <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
                                 </div>
                                 <div>
                                     <p class="item-title">{{ project.title }}</p>
@@ -39,9 +38,8 @@
                         {% for project in favorited %}
                             <a href="{% url 'diyprojects:project_detail' pk=project.pk %}" class="item-card">
                                 <div class="item-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                                    </svg>
+                                    <img src="{% static 'img/emerald.png' %}" class="slot-img" alt="" />
+                                    <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
                                 </div>
                                 <div>
                                     <p class="item-title">{{ project.title }}</p>
@@ -60,9 +58,8 @@
                         {% for project in reviewed %}
                             <a href="{% url 'diyprojects:project_detail' pk=project.pk %}" class="item-card">
                                 <div class="item-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                                    </svg>
+                                    <img src="{% static 'img/emerald.png' %}" class="slot-img" alt="" />
+                                    <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
                                 </div>
                                 <div>
                                     <p class="item-title">{{ project.title }}</p>
@@ -82,11 +79,8 @@
                     {% for project in remaining %}
                         <a href="{% url 'diyprojects:project_detail' pk=project.pk %}" class="item-card">
                             <div class="item-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                                    <line x1="8" y1="21" x2="16" y2="21"/>
-                                    <line x1="12" y1="17" x2="12" y2="21"/>
-                                </svg>
+                                <img src="{% static 'img/leather.png' %}" class="slot-img" alt="" />
+                                <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
                             </div>
                             <div>
                                 <p class="item-title">{{ project.title }}</p>
@@ -106,9 +100,8 @@
                     {% for project in projects %}
                         <a href="{% url 'diyprojects:project_detail' pk=project.pk %}" class="item-card">
                             <div class="item-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                                </svg>
+                                <img src="{% static 'img/leather.png' %}" class="slot-img" alt="" />
+                                <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
                             </div>
                             <div>
                                 <p class="item-title">{{ project.title }}</p>
@@ -126,10 +119,10 @@
 
     <div class="list-sidebar">
         <a href="{% url 'diyprojects:project_create' %}" class="sidebar-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
+            <div class="item-icon">
+                <img src="{% static 'img/bundle.png' %}" class="slot-img" alt="" />
+                <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+            </div>
             <span>Create a Project</span>
         </a>
     </div>

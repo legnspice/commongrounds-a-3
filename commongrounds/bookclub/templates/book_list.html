@@ -18,10 +18,8 @@
           <li>
             <a href="{{ book.get_absolute_url }}" class="item-card">
               <div class="item-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                </svg>
+                <img src="{% static 'img/enchanted_book.png' %}" class="slot-img" alt="" />
+                <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
               </div>
               <div>
                 <p class="item-title">{{ book.title }}</p>
@@ -42,10 +40,8 @@
           <li>
             <a href="{{ book.get_absolute_url }}" class="item-card">
               <div class="item-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                </svg>
+                <img src="{% static 'img/enchanted_book.png' %}" class="slot-img" alt="" />
+                <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
               </div>
               <div>
                 <p class="item-title">{{ book.title }}</p>
@@ -66,10 +62,8 @@
           <li>
             <a href="{{ book.get_absolute_url }}" class="item-card">
               <div class="item-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                </svg>
+                <img src="{% static 'img/enchanted_book.png' %}" class="slot-img" alt="" />
+                <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
               </div>
               <div>
                 <p class="item-title">{{ book.title }}</p>
@@ -98,10 +92,8 @@
         <li>
           <a href="{{ book.get_absolute_url }}" class="item-card">
             <div class="item-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-              </svg>
+              <img src="{% static 'img/book.png' %}" class="slot-img" alt="" />
+              <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
             </div>
             <div>
               <p class="item-title">{{ book.title }}</p>
@@ -120,12 +112,10 @@
   {% if user.is_authenticated %}
   <div class="list-sidebar">
     <a href="{% url 'bookclub:book_create' %}" class="sidebar-btn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-        <line x1="16" y1="7" x2="16" y2="13"/>
-        <line x1="13" y1="10" x2="19" y2="10"/>
-      </svg>
+      <div class="item-icon">
+          <img src="{% static 'img/book_quill.png' %}" class="slot-img" alt="" />
+          <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+      </div>
       <span>Add a book</span>
     </a>
   </div>

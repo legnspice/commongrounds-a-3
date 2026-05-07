@@ -18,7 +18,7 @@
     <!-- Global Navigation Bar -->
     <nav>
         <div>
-            <strong>Common Grounds</strong> | 
+            <a href="{% url 'accounts:dashboard' %}"><strong>Common Grounds</strong></a> | 
         <!-- App Links -->
             <a href="{% url 'localevents:event_list' %}">Local Events</a>
             <a href="{% url 'bookclub:books' %}">Book Club</a>
@@ -30,7 +30,7 @@
          <div>
             <span>
                 {% if request.user.is_authenticated %}
-                    Hi {{ request.user.profile.displayName }}! | 
+                    Hi {{ request.user.profile.display_name }}! | 
                     <a href="/accounts/{{ request.user.username }}">Edit Profile</a> | 
                     <form method="POST" action="{% url 'logout' %}" style="display:inline">
                         {% csrf_token %}

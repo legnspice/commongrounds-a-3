@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block body_class %}theme-commissions{% endblock %}
 {% block content %}
 <div class="mc-form-page">
@@ -9,10 +10,8 @@
         <div class="mc-form-body">
             <div class="mc-item-slot-panel">
                 <div class="mc-item-slot">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-                        <path d="M12 7V5a2 2 0 0 0-2-2H8"/>
-                    </svg>
+                    <img src="{% static 'img/gold_pickaxe.png' %}" class="slot-img" alt="" />
+                    <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
                 </div>
                 <div class="mc-item-info">
                     <p><strong>Commission</strong></p>

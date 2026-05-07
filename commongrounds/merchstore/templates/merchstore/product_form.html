@@ -14,11 +14,8 @@
         <div class="mc-form-body">
             <div class="mc-item-slot-panel">
                 <div class="mc-item-slot">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                        <line x1="3" y1="6" x2="21" y2="6"/>
-                        <path d="M16 10a4 4 0 0 1-8 0"/>
-                    </svg>
+                    <img src="{% static 'img/trident.png' %}" class="slot-img" alt="" />
+                    <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
                 </div>
                 <div class="mc-item-info">
                     <p><strong>{% if object %}Editing{% else %}New Product{% endif %}</strong></p>
