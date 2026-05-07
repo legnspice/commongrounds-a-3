@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+    --bg: #f0e6cc;
+    --bg-raised: #e8d9b0;
+    --bg-stone: #dcc990;
+    --accent: #6b3d1e;
+    --accent-hover: #4e2a10;
+    --accent-gold: #8b6914;
+    --accent-brown: #7a4a2a;
+    --text: #2e1a08;
+    --text-muted: #7a5a3a;
+    --border: #b08050;
+    --border-bright: #7a4a1e;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    color: var(--text);
+    font-family: 'Press Start 2P', monospace;
+}
+
+body {
+    background-color: var(--bg);
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 31px,
+            rgba(0,0,0,0.04) 31px,
+            rgba(0,0,0,0.04) 32px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 31px,
+            rgba(0,0,0,0.04) 31px,
+            rgba(0,0,0,0.04) 32px
+        );
+    font-size: 10px;
+    line-height: 1.8;
+}
+body.theme-bookclub {
+    --bg: #f0e6cc;
+    --bg-raised: #e8d9b0;
+    --bg-stone: #dcc990;
+    --accent: #6b3d1e;
+    --accent-gold: #8b6914;
+    --text: #2e1a08;
+    --text-muted: #7a5a3a;
+    --border: #b08050;
+    --border-bright: #7a4a1e;
+}
+
+body.theme-localevents {
+    --bg: #0d0a1a;
+    --bg-raised: #1a1528;
+    --bg-stone: #141020;
+    --accent: #9b6cc7;        
+    --accent-gold: #b899d4;   
+    --accent-brown: #6b3fb7; 
+    --text: #c8b8e8;    
+    --text-muted: #7a6a99;
+    --border: #3d2b6b;
+    --border-bright: #6a3aab;
+    --glow: rgba(180, 100, 255, 0.05);
+    --shadow: #4a1a8a;
+}
+
+body.theme-merchstore {
+    --bg: #020a0c;
+    --bg-raised: #071418;
+    --bg-stone: #050f12;
+    --accent: #2aaa9a;        
+    --accent-gold: #3abfb0;   
+    --accent-brown: #1a7a72;
+    --text: #88b8b8;
+    --text-muted: #2a5a5a;
+    --border: #0a3a3a;
+    --border-bright: #0d6060;
+    --glow: rgba(0, 200, 180, 0.05);
+    --shadow: #003a35;
+}
+
+body.theme-commissions {
+    --bg: #1a0a08;
+    --bg-raised: #2a1210;
+    --bg-stone: #1f1510;
+    --accent: #ff6a00;
+    --accent-hover: #cc4400;
+    --accent-gold: #ff4400;
+    --accent-brown: #cc3300;
+    --text: #e8c8b0;
+    --text-muted: #8a5a48;
+    --border: #5a2018;
+    --border-bright: #8b3020;
+    --glow: rgba(255, 100, 0, 0.05);
+}
+
+body.theme-diyprojects {
+    --bg: #e8f0e0;
+    --bg-raised: #d8e8c8;
+    --bg-stone: #c8dab8;
+    --accent: #3a6e1a;
+    --accent-hover: #2a5210;
+    --accent-gold: #5a8a2a;
+    --accent-brown: #6b4a1e;
+    --text: #1a2e0a;
+    --text-muted: #4a6a3a;
+    --border: #8aaa6a;
+    --border-bright: #4a7a2a;
+    --glow: rgba(60, 120, 30, 0.08);
+    --shadow: #2a5010;
+}
+
+nav {
+    background-color: var(--bg-raised);
+    border-bottom: 3px solid var(--border-bright);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+}
+
+nav strong {
+    color: var(--accent-gold);
+    text-shadow: 1px 1px #c8a030;
+    margin-right: 8px;
+}
+
+nav a {
+    text-decoration: none;
+    padding: 10px 16px;
+    border: 2px solid transparent;
+    font-size: 9px;
+    transition: border-color 0.1s, background-color 0.1s;
+}
+
+nav a:hover {
+    border-color: var(--border-bright);
+    background-color: var(--bg-stone);
+}
+
+.logout-btn {
+    display: inline;
+    background: none;
+    border: 2px solid transparent;
+    cursor: pointer;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    padding: 10px 16px;
+    transition: border-color 0.1s, background-color 0.1s;
+}
+
+.logout-btn:hover {
+    border-color: var(--border-bright);
+    background-color: var(--bg-stone);
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background-color: var(--border); }

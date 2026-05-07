@@ -1,55 +1,138 @@
 {% extends 'base.html' %}
+{% load static %}
 
+{% block body_class %}theme-diyprojects{% endblock %}
 {% block title %}DIY Projects{% endblock %}
 
 {% block content %}
-    <h1>DIY Projects</h1>
-    <a href="{% url 'diyprojects:project_create' %}">Create a Project</a>
+<div class="list-page">
 
-    {% if request.user.is_authenticated %}
-        <h2>Projects Created</h2>
-        <ul>
-            {% for project in created %}
-                <li><a href="{% url 'diyprojects:project_detail' pk=project.pk %}">{{ project.title }}</a> - {{ project.category }} - {{ project.created_on }}</li>
-            {% empty %}
-                <li>No projects created yet.</li>
-            {% endfor %}
-        </ul>
+    <div class="list-main">
 
-        <h2>Projects Favorited</h2>
-        <ul>
-            {% for project in favorited %}
-                <li><a href="{% url 'diyprojects:project_detail' pk=project.pk %}">{{ project.title }}</a> - {{ project.category }} - {{ project.created_on }}</li>
-            {% empty %}
-                <li>No projects favorited yet.</li>
-            {% endfor %}
-        </ul>
+        {% if request.user.is_authenticated %}
 
-        <h2>Projects Reviewed</h2>
-        <ul>
-            {% for project in reviewed %}
-                <li><a href="{% url 'diyprojects:project_detail' pk=project.pk %}">{{ project.title }}</a> - {{ project.category }} - {{ project.created_on }}</li>
-            {% empty %}
-                <li>No projects reviewed yet.</li>
-            {% endfor %}
-        </ul>
+            <div class="user-sections">
+                <div class="section-box">
+                    <h3>My Projects</h3>
+                    <ul class="item-list">
+                        {% for project in created %}
+                            <a href="{% url 'diyprojects:project_detail' pk=project.pk %}" class="item-card">
+                                <div class="item-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="item-title">{{ project.title }}</p>
+                                    <p class="item-subtitle">{{ project.category }} · {{ project.created_on|date:"M d, Y" }}</p>
+                                </div>
+                            </a>
+                        {% empty %}
+                            <p class="empty-msg">No projects created yet.</p>
+                        {% endfor %}
+                    </ul>
+                </div>
 
-        <h2>All Projects</h2>
-        <ul>
-            {% for project in remaining %}
-                <li><a href="{% url 'diyprojects:project_detail' pk=project.pk %}">{{ project.title }}</a> - {{ project.category }} - {{ project.created_on }}</li>
-            {% empty %}
-                <li>No other projects.</li>
-            {% endfor %}
-        </ul>
+                <div class="section-box">
+                    <h3>Favorited</h3>
+                    <ul class="item-list">
+                        {% for project in favorited %}
+                            <a href="{% url 'diyprojects:project_detail' pk=project.pk %}" class="item-card">
+                                <div class="item-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="item-title">{{ project.title }}</p>
+                                    <p class="item-subtitle">{{ project.category }} · {{ project.created_on|date:"M d, Y" }}</p>
+                                </div>
+                            </a>
+                        {% empty %}
+                            <p class="empty-msg">No favorited projects.</p>
+                        {% endfor %}
+                    </ul>
+                </div>
 
-    {% else %}
-        <ul>
-            {% for project in projects %}
-                <li><a href="{% url 'diyprojects:project_detail' pk=project.pk %}">{{ project.title }}</a> - {{ project.category }} - {{ project.created_on }}</li>
-            {% empty %}
-                <li>No projects yet.</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+                <div class="section-box">
+                    <h3>Reviewed</h3>
+                    <ul class="item-list">
+                        {% for project in reviewed %}
+                            <a href="{% url 'diyprojects:project_detail' pk=project.pk %}" class="item-card">
+                                <div class="item-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="item-title">{{ project.title }}</p>
+                                    <p class="item-subtitle">{{ project.category }} · {{ project.created_on|date:"M d, Y" }}</p>
+                                </div>
+                            </a>
+                        {% empty %}
+                            <p class="empty-msg">No reviewed projects.</p>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="list-box">
+                <h2>All Projects</h2>
+                <ul class="item-list">
+                    {% for project in remaining %}
+                        <a href="{% url 'diyprojects:project_detail' pk=project.pk %}" class="item-card">
+                            <div class="item-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                    <line x1="8" y1="21" x2="16" y2="21"/>
+                                    <line x1="12" y1="17" x2="12" y2="21"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="item-title">{{ project.title }}</p>
+                                <p class="item-subtitle">{{ project.category }} · {{ project.created_on|date:"M d, Y" }}</p>
+                            </div>
+                        </a>
+                    {% empty %}
+                        <p class="empty-msg">No other projects.</p>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        {% else %}
+            <div class="list-box">
+                <h2>All Projects</h2>
+                <ul class="item-list">
+                    {% for project in projects %}
+                        <a href="{% url 'diyprojects:project_detail' pk=project.pk %}" class="item-card">
+                            <div class="item-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="item-title">{{ project.title }}</p>
+                                <p class="item-subtitle">{{ project.category }} · {{ project.created_on|date:"M d, Y" }}</p>
+                            </div>
+                        </a>
+                    {% empty %}
+                        <p class="empty-msg">No projects yet.</p>
+                    {% endfor %}
+                 </ul>
+            </div>
+        {% endif %}
+
+    </div>
+
+    <div class="list-sidebar">
+        <a href="{% url 'diyprojects:project_create' %}" class="sidebar-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            <span>Create a Project</span>
+        </a>
+    </div>
+
+</div>
 {% endblock %}

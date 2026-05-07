@@ -1,56 +1,116 @@
 {% extends 'base.html' %}
+{% load static %}
 
+{% block body_class %}theme-diyprojects{% endblock %}
 {% block title %}{{ project.title }}{% endblock %}
 
 {% block content %}
-    <h1>{{ project.title }}</h1>
-    <p><strong>Category:</strong> {{ project.category }}</p>
-    <p><strong>Creator:</strong> {{ project.creator }}</p>
-    <p><strong>Description:</strong> {{ project.description }}</p>
-    <p><strong>Materials:</strong> {{ project.materials }}</p>
-    <p><strong>Steps:</strong> {{ project.steps }}</p>
-    <p><strong>Created On:</strong> {{ project.created_on }}</p>
-    <p><strong>Updated On:</strong> {{ project.updated_on }}</p>
+<div class="detail-page">
 
-    <p><strong>Average Rating:</strong> {{ avg_rating|default:"No ratings yet" }}</p>
-    <p><strong>Favorites:</strong> {{ favorites_count }}</p>
+    <div class="detail-header">
+        <div>
+            <h1>{{ project.title }}</h1>
+            <h2>{{ project.category }}</h2>
+        </div>
+    </div>
 
-    {% if request.user.is_authenticated %}
-        {% if request.user.profile == project.creator %}
-            <a href="{% url 'diyprojects:project_update' pk=project.pk %}">Edit Project</a>
+    <div class="detail-info-panel">
+        <div class="list-box">
+            <div class="info-row">
+                <span class="info-label">Creator</span>
+                <span class="info-value">{{ project.creator }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Average Rating</span>
+                <span class="info-value">{{ avg_rating|default:"No ratings yet" }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Favorites</span>
+                <span class="info-value">{{ favorites_count }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Created On</span>
+                <span class="info-value">{{ project.created_on|date:"M d, Y" }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Updated On</span>
+                <span class="info-value">{{ project.updated_on|date:"M d, Y" }}</span>
+            </div>
+
+            <div class="detail-subsection">
+                <h3>Description</h3>
+                <p class="detail-card-body">{{ project.description }}</p>
+            </div>
+
+            <div class="detail-subsection">
+                <h3>Materials</h3>
+                <p class="detail-card-body">{{ project.materials }}</p>
+            </div>
+
+            <div class="detail-subsection">
+                <h3>Steps</h3>
+                <p class="detail-card-body">{{ project.steps }}</p>
+            </div>
+
+            {% if request.user.is_authenticated %}
+                <div class="detail-subsection">
+                    {% if request.user.profile == project.creator %}
+                        <a href="{% url 'diyprojects:project_update' pk=project.pk %}" class="action-btn primary">Edit Project</a>
+                    {% endif %}
+
+                    <form method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" name="favorite_submit" class="action-btn">
+                            {% if user_favorite %}Unfavorite{% else %}Favorite{% endif %}
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+
+        <a href="{% url 'diyprojects:project_list' %}" class="back-link">← Back to Projects</a>
+    </div>
+
+    <div class="detail-side-panel">
+
+        {% if request.user.is_authenticated %}
+            <div class="list-box">
+                <h2>Rate this Project</h2>
+                <form method="POST" class="side-form">
+                    {% csrf_token %}
+                    {{ rating_form.as_p }}
+                    <button type="submit" name="rating_submit" class="mc-submit-btn">Submit Rating</button>
+                </form>
+            </div>
+
+            <div class="list-box">
+                <h2>Leave a Review</h2>
+                <form method="POST" enctype="multipart/form-data" class="side-form">
+                    {% csrf_token %}
+                    {{ review_form.as_p }}
+                    <button type="submit" name="review_submit" class="mc-submit-btn">Submit Review</button>
+                </form>
+            </div>
         {% endif %}
 
-        <form method="POST">
-            {% csrf_token %}
-            <button type="submit" name="favorite_submit">
-                {% if user_favorite %}Unfavorite{% else %}Favorite{% endif %}
-            </button>
-        </form>
+        <div class="list-box" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+            <h2>Reviews</h2>
+            <div class="detail-scroll">
+                {% for review in reviews %}
+                    <div class="detail-card">
+                        <p class="detail-card-meta">{{ review.reviewer }}</p>
+                        <p class="detail-card-body">{{ review.comment }}</p>
+                        {% if review.image %}
+                            <img src="{{ review.image.url }}" alt="Review image" style="width: 100%; margin-top: 8px;">
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <p class="empty-msg">No reviews yet.</p>
+                {% endfor %}
+            </div>
+        </div>
 
-        <h2>Rate this Project</h2>
-        <form method="POST">
-            {% csrf_token %}
-            {{ rating_form.as_p }}
-            <button type="submit" name="rating_submit">Submit Rating</button>
-        </form>
+    </div>
 
-        <h2>Leave a Review</h2>
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ review_form.as_p }}
-            <button type="submit" name="review_submit">Submit Review</button>
-        </form>
-    {% endif %}
-
-    <h2>Reviews</h2>
-    {% for review in reviews %}
-        <p><strong>{{ review.reviewer }}</strong>: {{ review.comment }}</p>
-        {% if review.image %}
-            <img src="{{ review.image.url }}" alt="Review image" width="200">
-        {% endif %}
-    {% empty %}
-        <p>No reviews yet.</p>
-    {% endfor %}
-
-    <a href="{% url 'diyprojects:project_list' %}">Back to Projects</a>
+</div>
 {% endblock %}

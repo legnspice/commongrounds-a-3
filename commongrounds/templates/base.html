@@ -1,41 +1,52 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Common Grounds {% block title %}{% endblock %}</title>
-    <style></style>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mc_form.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     {% block style %}{% endblock %}
+    
   </head>
-  <body>
+  <body class="{% block body_class %}{% endblock %}">
     
     <!-- Global Navigation Bar -->
-    <nav style="background-color: #f0f0f0; padding: 15px; margin-bottom: 20px; border-bottom: 1px solid #ccc;">
-        <strong>Common Grounds</strong> | 
-        
+    <nav>
+        <div>
+            <strong>Common Grounds</strong> | 
         <!-- App Links -->
-        <a href="{% url 'localevents:event_list' %}" style="margin-left: 15px;">Community Events</a>
-        <a href="{% url 'localevents:event_create' %}" style="margin-left: 15px;">Host an Event</a>
-        <a href="/bookclub/books/" style="margin-left: 15px;">Book Club</a>
-
+            <a href="{% url 'localevents:event_list' %}">Local Events</a>
+            <a href="{% url 'bookclub:books' %}">Book Club</a>
+            <a href="{% url 'merchstore:item_list' %}">Merchandise Store</a>
+            <a href="{% url 'diyprojects:project_list' %}">DIY Projects</a>
+            <a href="{% url 'commissions:commissionlist' %}">Commission requests</a>
+        </div>
         <!-- User Controls (Aligned to the right) -->
-        <span style="float: right;">
-            {% if request.user.is_authenticated %}
-                Hi {{ request.user.profile.display_name }}! | 
-                <a href="/accounts/{{ request.user.username }}/" style="margin-right: 10px;">Edit Profile</a>
-                
-                <form method="POST" action="{% url 'logout' %}" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;">Logout</button>
-                </form>
-            {% else %}
-                <a href="{% url 'login' %}">Login</a>
-            {% endif %}
-        </span>
+         <div>
+            <span>
+                {% if request.user.is_authenticated %}
+                    Hi {{ request.user.profile.displayName }}! | 
+                    <a href="/accounts/{{ request.user.username }}">Edit Profile</a> | 
+                    <form method="POST" action="{% url 'logout' %}" style="display:inline">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}">Login</a>
+                {% endif %}
+            </span>
+        </div>
+
+        
     </nav>
 
     <!-- App Content Wrapper -->
-    <div style="padding: 0 20px;">
+    <div style="margin: 20px">
         {% block content %}{% endblock %} 
     </div>
     

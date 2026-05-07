@@ -3,9 +3,9 @@ from .views import CommissionListView, CommissionDetailView, CommissionCreateVie
 
 urlpatterns = [
     path('requests', CommissionListView, name='commissionlist'),
+    path('request/add', CommissionCreateView, name='commissioncreate'),
     path('request/<int:pk>', CommissionDetailView,
          name='commissiondetail'),
-    path('request/add', CommissionCreateView, name='commissioncreate'),
     path('request/<int:pk>/edit', CommissionUpdateView, name='commissionupdate'),
     path('request/job/<int:job_pk>/apply', JobApplicationCreateView, name='jobapply'),
 ]

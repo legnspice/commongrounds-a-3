@@ -129,5 +129,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 LOGIN_REDIRECT_URL = "/bookclub/books"
 LOGOUT_REDIRECT_URL = "/accounts/login"
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

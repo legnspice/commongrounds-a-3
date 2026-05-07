@@ -1,35 +1,93 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}theme-commissions{% endblock %}
 
 {% block content %}
+<div class="list-page">
 
-    <a href="{% url 'commissions:commissioncreate' %}">Post a Commission</a>
+  <div class="list-main">
 
     {% if user.is_authenticated %}
+    <div class="user-sections">
 
-        <h2>My Commissions</h2>
-        {% for commission in user_commissions %}
-            <a href="{{ commission.get_absolute_url }}">{{ commission.title }}</a>
-            <br>
-        {% empty %}
-            <p>You haven't posted any commissions.</p>
-        {% endfor %}
+      <div class="section-box">
+        <h3>My Commissions</h3>
+        <ul class="item-list">
+          {% for commission in user_commissions %}
+          <li>
+            <a href="{{ commission.get_absolute_url }}" class="item-card">
+              <div class="item-icon">
+                <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                </svg>
+              </div>
+              <div>
+                <p class="item-title">{{ commission.title }}</p>
+              </div>
+            </a>
+          </li>
+          {% empty %}
+          <p class="empty-msg">No commissions posted.</p>
+          {% endfor %}
+        </ul>
+      </div>
 
-        <h2>Applied Commissions</h2>
-        {% for commission in applied_commissions %}
-            <a href="{{ commission.get_absolute_url }}">{{ commission.title }}</a>
-            <br>
-        {% empty %}
-            <p>You haven't applied to any commissions.</p>
-        {% endfor %}
+      <div class="section-box">
+        <h3>Applied Commissions</h3>
+        <ul class="item-list">
+          {% for commission in applied_commissions %}
+          <li>
+            <a href="{{ commission.get_absolute_url }}" class="item-card">
+              <div class="item-icon">
+                <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                </svg>
+              </div>
+              <div>
+                <p class="item-title">{{ commission.title }}</p>
+              </div>
+            </a>
+          </li>
+          {% empty %}
+          <p class="empty-msg">No applications yet.</p>
+          {% endfor %}
+        </ul>
+      </div>
 
+    </div>
     {% endif %}
 
-    <h2>All Commissions</h2>
-    {% for commission in all_commissions %}
-        <a href="{{ commission.get_absolute_url }}">{{ commission.title }}</a>
-        <br>
-    {% empty %}
-        <p>No commissions available.</p>
-    {% endfor %}
+    <div class="list-box">
+      <h2>All Commissions</h2>
+      <ul class="item-list">
+        {% for commission in all_commissions %}
+        <li>
+          <a href="{{ commission.get_absolute_url }}" class="item-card">
+            <div class="item-icon">
+              <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+              </svg>
+            </div>
+            <div>
+              <p class="item-title">{{ commission.title }}</p>
+            </div>
+          </a>
+        </li>
+        {% empty %}
+        <p class="empty-msg">No commissions available.</p>
+        {% endfor %}
+      </ul>
+    </div>
 
+  </div>
+
+  {% if user.is_authenticated %}
+  <div class="list-sidebar">
+    <a href="{% url 'commissions:commissioncreate' %}" class="sidebar-btn">
+      <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      </svg>
+      <span>Post a commission</span>
+    </a>
+  </div>
+  {% endif %}
+
+</div>
 {% endblock %}

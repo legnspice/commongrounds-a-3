@@ -1,17 +1,48 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}theme-localevents{% endblock %}
 
 {% block content %}
-<div class="event-form">
-    <h2>{% if object %}Update Your Event{% else %}Create a New Community Event{% endif %}</h2>
-    
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        
-        <button type="submit" class="btn btn-primary">Publish Event</button>
-    </form>
+<div class="mc-form-page">
+    <div class="mc-form-container">
 
-    <br>
-    <a href="{% url 'localevents:event_list' %}">Cancel and Return</a>
+        <h1 class="mc-form-title">
+            {% if object %}Update Your Event{% else %}Create a New Event{% endif %}
+        </h1>
+
+        <div class="mc-form-body">
+            <div class="mc-item-slot-panel">
+                <div class="mc-item-slot">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                </div>
+                <div class="mc-item-info">
+                    <p><strong>{% if object %}Editing{% else %}New Event{% endif %}</strong></p>
+                    <p>{% if object %}{{ object.title }}{% else %}Fill in the details below.{% endif %}</p>
+                </div>
+            </div>
+
+            <div class="mc-enchant-panel">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mc-enchant-row">
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="mc-submit-btn">Publish Event</button>
+                </form>
+            </div>
+        </div>
+
+        <a href="{% url 'localevents:event_list' %}" class="back-link">← Cancel and Return</a>
+
+    </div>
 </div>
 {% endblock %}
