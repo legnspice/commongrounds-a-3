@@ -73,7 +73,7 @@
       {% for review in book.reviews.all %}
       <div class="detail-card">
         <span class="detail-card-meta">
-          {% if review.user_reviewer %}{{ review.user_reviewer.displayName }}{% else %}{{ review.anon_reviewer }}{% endif %}
+          {% if review.user_reviewer %}{{ review.user_reviewer.display_name }}{% else %}{{ review.anon_reviewer }}{% endif %}
         </span>
         <p class="detail-card-title">{{ review.title }}</p>
         <p class="detail-card-body">{{ review.comment }}</p>
