@@ -2,23 +2,49 @@
 {% load static %}
 
 {% block body_class %}theme-merchstore{% endblock %}
+
 {% block content %}
-<h1>My Cart</h1>
+<div class="list-page">
 
-{% for owner, transactions in grouped.items %}
-  <h2>Seller: {{ owner.displayName }}</h2>
-  <ul>
-    {% for t in transactions %}
-    <li>
-      <p>{{ t.product.name }} x{{ t.amount }}</p>
-      <p>Status: {{ t.status }}</p>
-    </li>
-    {% endfor %}
-  </ul>
-{% empty %}
-  <p>No transactions yet.</p>
-{% endfor %}
+    <div class="list-main">
 
-<a href="{% url 'merchstore:item_list' %}">Back to Store</a>
+        {% for owner, transactions in grouped.items %}
+            <div class="list-box">
+                <h2>{{ owner.displayName }}</h2>
+                <ul class="item-list">
+                    {% for t in transactions %}
+                        <div class="item-card">
+                            <div class="item-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                                    <line x1="3" y1="6" x2="21" y2="6"/>
+                                    <path d="M16 10a4 4 0 0 1-8 0"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="item-title">{{ t.product.name }} x{{ t.amount }}</p>
+                                <p class="item-subtitle">Status: {{ t.status }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% empty %}
+            <div class="list-box">
+                <p class="empty-msg">No transactions yet.</p>
+            </div>
+        {% endfor %}
 
+    </div>
+
+    <div class="list-sidebar">
+        <a href="{% url 'merchstore:item_list' %}" class="sidebar-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+            <span>Back to Store</span>
+        </a>
+    </div>
+
+</div>
 {% endblock %}

@@ -1,6 +1,7 @@
 .detail-page {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
     gap: 20px;
     padding: 20px;
 }
@@ -39,7 +40,7 @@
 
 .detail-side-panel {
     grid-column: 2;
-    grid-row: 1 / 3;
+    grid-row: 2 / 4;
     display: flex;
     flex-direction: column;
     gap: 14px;

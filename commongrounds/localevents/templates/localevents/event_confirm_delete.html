@@ -2,17 +2,49 @@
 {% load static %}
 
 {% block body_class %}theme-localevents{% endblock %}
+
 {% block content %}
-<div class="event-delete">
-    <h2>Cancel Event</h2>
-    <p>Are you absolutely sure you want to permanently cancel and delete the event: <strong>"{{ object.title }}"</strong>?</p>
-    
-    <form method="POST">
-        {% csrf_token %}
-        <button type="submit" style="background-color: darkred; color: white;">Yes, Delete Event</button>
-    </form>
-    
-    <br>
-    <a href="{% url 'localevents:event_detail' object.pk %}">Nevermind, take me back.</a>
+<div class="mc-form-page">
+    <div class="mc-form-container">
+
+        <h1 class="mc-form-title">Cancel Event</h1>
+
+        <div class="mc-form-body">
+            <div class="mc-item-slot-panel">
+                <div class="mc-item-slot">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                        <path d="M10 11v6M14 11v6"/>
+                        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                    </svg>
+                </div>
+                <div class="mc-item-info">
+                    <p><strong>Deleting</strong></p>
+                    <p>{{ object.title }}</p>
+                </div>
+            </div>
+
+            <div class="mc-enchant-panel">
+                <div class="mc-enchant-row">
+                    <p style="font-size: 8px; color: var(--text-muted); line-height: 2;">
+                        Are you sure you want to permanently delete 
+                        <strong style="color: var(--text);">{{ object.title }}</strong>?
+                        This action cannot be undone.
+                    </p>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="mc-submit-btn" style="color: #ff4444;">
+                        Yes, Delete Event
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <a href="{% url 'localevents:event_detail' object.pk %}" class="back-link">← Nevermind, take me back.</a>
+
+    </div>
 </div>
 {% endblock %}

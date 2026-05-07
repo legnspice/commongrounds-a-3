@@ -2,27 +2,45 @@
 {% load static %}
 
 {% block body_class %}theme-localevents{% endblock %}
-{% block content %}
-<div class="container mt-4">
-    <h2>Sign up for: {{ event.title }}</h2>
-    
-    <div class="card mb-4" style="padding: 15px; background-color: #f9f9f9; border: 1px solid #ddd;">
-        <p><strong>Date:</strong> {{ event.start_time }}</p>
-        <p><strong>Location:</strong> {{ event.location }}</p>
-        <p><strong>Capacity Remaining:</strong> {{ spots_remaining }} spots left</p>
-    </div>
 
-    <form method="POST">
-        {% csrf_token %}
-        <div style="margin-bottom: 15px;">
-            <label for="new_registrant"><strong>Your Full Name:</strong></label><br>
-            <input type="text" name="new_registrant" id="new_registrant" required placeholder="John Doe" style="width: 100%; max-width: 400px; padding: 8px;">
+{% block content %}
+<div class="mc-form-page">
+    <div class="mc-form-container">
+
+        <h1 class="mc-form-title">Sign Up for Event</h1>
+
+        <div class="mc-form-body">
+            <div class="mc-item-slot-panel">
+                <div class="mc-item-slot">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <div class="mc-item-info">
+                    <p><strong>{{ event.title }}</strong></p>
+                    <p>{{ event.start_time|date:"M d, Y" }}</p>
+                    <p>{{ event.location }}</p>
+                    <p>{{ spots_remaining }} spots left</p>
+                </div>
+            </div>
+
+            <div class="mc-enchant-panel">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mc-enchant-row">
+                        <label for="new_registrant">Your Full Name</label>
+                        <input type="text" name="new_registrant" id="new_registrant" required placeholder="John Doe">
+                    </div>
+                    <button type="submit" class="mc-submit-btn">Confirm Registration</button>
+                </form>
+            </div>
         </div>
-        
-        <button type="submit" class="btn btn-success">Confirm Registration</button>
-    </form>
-    
-    <br>
-    <a href="{% url 'localevents:event_detail' event.pk %}">Go Back</a>
+
+        <a href="{% url 'localevents:event_detail' event.pk %}" class="back-link">← Go Back</a>
+
+    </div>
 </div>
 {% endblock %}
