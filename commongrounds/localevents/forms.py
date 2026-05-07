@@ -34,7 +34,6 @@ class EventForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Adds Bootstrap classes to every field for a consistent look
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
 

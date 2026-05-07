@@ -28,7 +28,7 @@
                     {% csrf_token %}
                     {% for field in form %}
                         <div class="mc-enchant-row">
-                            {{ field.md_tag }}
+                            {{ field.label_tag }}
                             {{ field }}
                         </div>
                     {% endfor %}
