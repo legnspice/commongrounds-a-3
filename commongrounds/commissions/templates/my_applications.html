@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}theme-commissions{% endblock %}
+
+{% block content %}
+<div class="list-page">
+    <div class="list-main">
+        <div class="list-box">
+            {% for application in applications %}
+                <div class="item-card">
+                    <div class="mc-item-slot">
+                        <img src="{% static 'img/gold_totem.png' %}" class="slot-img" alt="" />
+                        <img src="{% static 'img/unnamed.png' %}" class="slot-img-hover" alt="" />
+                    </div>
+                    <div>
+                        <p class="item-title">{{ application.job.commission.title }}</p>
+                        <p class="item-subtitle">Role: {{ application.job.role }}</p>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="application_id" value="{{ application.pk }}">
+                            <select name="status" class="mc-select" onchange="this.form.submit()">
+                                {% for value, label in application.STATUS_CHOICES %}
+                                    <option value="{{ value }}" {% if application.status == value %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="list-sidebar">
+        <a href="{% url 'commissions:commissionlist' %}" class="sidebar-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+            <span>Back to Commissions</span>
+        </a>
+    </div>
+</div>
+{% endblock %}
