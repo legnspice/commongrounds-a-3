@@ -1,6 +1,7 @@
 from django.db import models
 
 from accounts.models import Profile
+from django.urls import reverse
 
 
 class EventType(models.Model):
@@ -46,6 +47,9 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('localevents:event_detail', kwargs={'pk': self.pk})
 
 
 class EventSignup(models.Model):
